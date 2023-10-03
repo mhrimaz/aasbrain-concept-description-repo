@@ -1,0 +1,491 @@
+[
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "name of a person, company or organisation with ultimate responsibility to verify the product compliance with the appropriate standard or standards and to provide the product information"
+      },
+      {
+        "language": "de",
+        "text": "Name der Person, des Unternehmens oder der Organisation, die letztendlich für die Überprüfung der Übereinstimmung des Produkts mit der/den entsprechenden Norm(en) und für die Bereitstellung der Produktinformationen verantwortlich ist"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "type": "ExternalReference",
+          "keys": [
+            {
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "modelType": "DataSpecificationIec61360",
+          "dataType": "STRING_TRANSLATABLE",
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "ManufacturerName"
+            },
+            {
+              "language": "de",
+              "text": "Herstellername"
+            }
+          ],
+          "shortName": [
+            {
+              "language": "en",
+              "text": "ManufacturerName"
+            }
+          ],
+          "sourceOfDefinition": "eCl@ss"
+        }
+      }
+    ],
+    "idShort": "ManufacturerName",
+    "displayName": [
+      {
+        "language": "en",
+        "text": "Manufacturer"
+      },
+      {
+        "language": "de",
+        "text": "Hersteller"
+      }
+    ],
+    "id": "0173-1#02-AAO677#002",
+    "isCaseOf": [
+      {
+        "type": "ExternalReference",
+        "keys": [
+          {
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO677#002"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "internationally unique identification number for the manufacturer of the device or the product and for the physical location"
+      },
+      {
+        "language": "de",
+        "text": "international eindeutige Nummer für den Geräte- oder Produkthersteller sowie für den Standort"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "definition": [
+            {
+              "language": "en",
+              "text": "internationally unique identification number for the manufacturer of the device or the product and for the physical location"
+            },
+            {
+              "language": "de",
+              "text": "international eindeutige Nummer für den Geräte- oder Produkthersteller sowie für den Standort"
+            }
+          ],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "GLN of manufacturer"
+            },
+            {
+              "language": "de",
+              "text": "GLN des Herstellers"
+            }
+          ],
+          "shortName": [
+            {
+              "language": "en",
+              "text": "GLN of manufacturer"
+            }
+          ]
+        }
+      }
+    ],
+    "idShort": "GLNOfManufacturer",
+    "id": "0173-1#02-AAY812#001",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAY812#001"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "administration": {
+      "version": "1",
+      "revision": "0"
+    },
+    "description": [
+      {
+        "language": "en",
+        "text": "Manufacturer product designation"
+      },
+      {
+        "language": "de",
+        "text": "Herstellerproduktbezeichnung"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "dataType": "STRING_TRANSLATABLE",
+          "definition": [],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "Manufacturer product designation"
+            },
+            {
+              "language": "de",
+              "text": "Herstellerproduktbezeichnung"
+            }
+          ],
+          "shortName": []
+        }
+      }
+    ],
+    "idShort": "ManufacturerProductDesignation",
+    "id": "0173-1#02-AAW338#001",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAW338#001"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "Description of the product, it's technical features and implementation if needed (long text)"
+      },
+      {
+        "language": "de",
+        "text": "Beschreibung des Produktes, seiner technischen Eigenschaften und ggf. seiner Anwendung (Langtext)"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "dataType": "STRING_TRANSLATABLE",
+          "definition": [],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "Manufacturer product description"
+            },
+            {
+              "language": "de",
+              "text": "Herstellerproduktbeschreibung"
+            }
+          ],
+          "shortName": []
+        }
+      }
+    ],
+    "idShort": "ManufacturerProductDescription",
+    "id": "0173-1#02-AAU734#001",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAU734#001"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "unique product identifier of the manufacturer"
+      },
+      {
+        "language": "de",
+        "text": "eindeutiger Bestellschlüssel des Herstellers"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "dataType": "STRING_TRANSLATABLE",
+          "definition": [],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "product article number of manufacturer"
+            },
+            {
+              "language": "de",
+              "text": "Herstellerartikelnummer"
+            }
+          ],
+          "shortName": [
+            {
+              "language": "en",
+              "text": "MAN_PROD_NUM"
+            }
+          ]
+        }
+      }
+    ],
+    "idShort": "MAN_PROD_NUM",
+    "id": "0173-1#02-AAO676#003",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO676#003"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "2nd level of a 3 level manufacturer specific product hierarchy"
+      },
+      {
+        "language": "de",
+        "text": "2. Ebene einer 3 stufigen herstellerspezifischen Produkthierarchie"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "dataType": "STRING_TRANSLATABLE",
+          "definition": [],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "Manufacturer product family"
+            },
+            {
+              "language": "de",
+              "text": "Herstellerproduktfamilie"
+            }
+          ],
+          "shortName": [
+            {
+              "language": "en",
+              "text": "ManufacturerProductFamily"
+            }
+          ]
+        }
+      }
+    ],
+    "idShort": "ManufacturerProductFamily",
+    "id": "0173-1#02-AAU731#001",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAU731#001"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "name of supplier which provides the customer with a product or a service"
+      },
+      {
+        "language": "de",
+        "text": "Name des Lieferanten, welcher dem Kunden ein Produkt oder eine Dienstleistung bereitstellt"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "dataType": "STRING",
+          "definition": [],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "name of supplier"
+            },
+            {
+              "language": "de",
+              "text": "Lieferantenname"
+            }
+          ],
+          "shortName": []
+        }
+      }
+    ],
+    "idShort": "NameOfSupplier",
+    "id": "0173-1#02-AAO735#003",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAO735#003"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  },
+  {
+    "description": [
+      {
+        "language": "en",
+        "text": "electric charge which a fully charged accumulator can emit under specified conditions"
+      },
+      {
+        "language": "de",
+        "text": " Elektrizitätsmenge oder elektrische Ladung, die ein vollständig geladener Akku unter festgelegten Bedingungen abgeben kann"
+      }
+    ],
+    "embeddedDataSpecifications": [
+      {
+        "dataSpecification": {
+          "keys": [
+            {
+              "idType": "IRI",
+              "local": false,
+              "type": "GlobalReference",
+              "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
+            }
+          ]
+        },
+        "dataSpecificationContent": {
+          "definition": [],
+          "preferredName": [
+            {
+              "language": "en",
+              "text": "battery capacity"
+            },
+            {
+              "language": "de",
+              "text": "Akkukapazität"
+            }
+          ],
+          "shortName": [],
+          "unit": "mAh"
+        }
+      }
+    ],
+    "idShort": "BatteryCapacity",
+    "id": "0173-1#02-AAR570#004",
+    "isCaseOf": [
+      {
+        "keys": [
+          {
+            "idType": "IRDI",
+            "local": false,
+            "type": "GlobalReference",
+            "value": "0173-1#02-AAR570#004"
+          }
+        ]
+      }
+    ],
+    "modelType": "ConceptDescription"
+  }
+]
