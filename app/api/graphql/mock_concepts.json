@@ -83,10 +83,9 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
@@ -112,12 +111,6 @@
               "language": "de",
               "text": "GLN des Herstellers"
             }
-          ],
-          "shortName": [
-            {
-              "language": "en",
-              "text": "GLN of manufacturer"
-            }
           ]
         }
       }
@@ -126,10 +119,9 @@
     "id": "0173-1#02-AAY812#001",
     "isCaseOf": [
       {
+        "type": "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAY812#001"
           }
@@ -156,10 +148,9 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
@@ -167,7 +158,6 @@
         },
         "dataSpecificationContent": {
           "dataType": "STRING_TRANSLATABLE",
-          "definition": [],
           "preferredName": [
             {
               "language": "en",
@@ -177,8 +167,7 @@
               "language": "de",
               "text": "Herstellerproduktbezeichnung"
             }
-          ],
-          "shortName": []
+          ]
         }
       }
     ],
@@ -186,10 +175,9 @@
     "id": "0173-1#02-AAW338#001",
     "isCaseOf": [
       {
+        "type": "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAW338#001"
           }
@@ -212,10 +200,9 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
@@ -223,7 +210,6 @@
         },
         "dataSpecificationContent": {
           "dataType": "STRING_TRANSLATABLE",
-          "definition": [],
           "preferredName": [
             {
               "language": "en",
@@ -233,8 +219,7 @@
               "language": "de",
               "text": "Herstellerproduktbeschreibung"
             }
-          ],
-          "shortName": []
+          ]
         }
       }
     ],
@@ -242,10 +227,9 @@
     "id": "0173-1#02-AAU734#001",
     "isCaseOf": [
       {
+        "type" : "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAU734#001"
           }
@@ -268,10 +252,9 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
@@ -279,7 +262,6 @@
         },
         "dataSpecificationContent": {
           "dataType": "STRING_TRANSLATABLE",
-          "definition": [],
           "preferredName": [
             {
               "language": "en",
@@ -303,10 +285,9 @@
     "id": "0173-1#02-AAO676#003",
     "isCaseOf": [
       {
+        "type": "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAO676#003"
           }
@@ -329,10 +310,9 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
@@ -340,7 +320,6 @@
         },
         "dataSpecificationContent": {
           "dataType": "STRING_TRANSLATABLE",
-          "definition": [],
           "preferredName": [
             {
               "language": "en",
@@ -350,12 +329,6 @@
               "language": "de",
               "text": "Herstellerproduktfamilie"
             }
-          ],
-          "shortName": [
-            {
-              "language": "en",
-              "text": "ManufacturerProductFamily"
-            }
           ]
         }
       }
@@ -364,10 +337,9 @@
     "id": "0173-1#02-AAU731#001",
     "isCaseOf": [
       {
+        "type": "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAU731#001"
           }
@@ -390,10 +362,9 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
@@ -401,7 +372,6 @@
         },
         "dataSpecificationContent": {
           "dataType": "STRING",
-          "definition": [],
           "preferredName": [
             {
               "language": "en",
@@ -411,8 +381,7 @@
               "language": "de",
               "text": "Lieferantenname"
             }
-          ],
-          "shortName": []
+          ]
         }
       }
     ],
@@ -420,10 +389,9 @@
     "id": "0173-1#02-AAO735#003",
     "isCaseOf": [
       {
+        "type": "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAO735#003"
           }
@@ -446,17 +414,15 @@
     "embeddedDataSpecifications": [
       {
         "dataSpecification": {
+          "type": "ExternalReference",
           "keys": [
             {
-              "idType": "IRI",
-              "local": false,
               "type": "GlobalReference",
               "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/3/0"
             }
           ]
         },
         "dataSpecificationContent": {
-          "definition": [],
           "preferredName": [
             {
               "language": "en",
@@ -467,7 +433,6 @@
               "text": "Akkukapazität"
             }
           ],
-          "shortName": [],
           "unit": "mAh"
         }
       }
@@ -476,10 +441,9 @@
     "id": "0173-1#02-AAR570#004",
     "isCaseOf": [
       {
+        "type": "ExternalReference",
         "keys": [
           {
-            "idType": "IRDI",
-            "local": false,
             "type": "GlobalReference",
             "value": "0173-1#02-AAR570#004"
           }
