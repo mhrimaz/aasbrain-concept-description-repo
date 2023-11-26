@@ -16,6 +16,7 @@ from app.models.extension import Extension
 from app.models.key import Key
 from app.models.property import Property
 from app.models.reference import Reference
+from app.models.serializer import TurtleSerializerCustom
 from app.models.submodel import Submodel
 from tests.model_test import get_testdata_json, get_testdata_rdf
 
@@ -117,6 +118,8 @@ def test_concept_description_to_rdf():
     payload_json = json.loads(get_testdata_json("ConceptDescription", "maximal"))["conceptDescriptions"][0]
     payload = ConceptDescription(**payload_json)
     graph, created_node = payload.to_rdf()
-    print(Graph.serialize(graph))
+    print(graph.serialize())
     re_created = ConceptDescription.from_rdf(graph, created_node)
+    g2 = Graph().parse(data=graph.serialize())
+    print(g2.serialize(format="turtle_custom"))
     assert re_created == payload
