@@ -227,7 +227,7 @@
     "id": "0173-1#02-AAU734#001",
     "isCaseOf": [
       {
-        "type" : "ExternalReference",
+        "type": "ExternalReference",
         "keys": [
           {
             "type": "GlobalReference",

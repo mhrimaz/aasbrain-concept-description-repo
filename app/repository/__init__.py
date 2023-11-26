@@ -5,11 +5,11 @@ from app.repository.concept_description_repository import ConceptDescriptionRepo
 from app.repository.impl.redis_cd_repository import RedisConceptDescriptionRepository
 
 
-if get_config().db_backend == 'redis':
+if get_config().db_backend == "redis":
     cd_repository = RedisConceptDescriptionRepository()
-elif get_config().db_backend == 'neo4j':
+elif get_config().db_backend == "neo4j":
     raise NotImplemented()
-elif get_config().db_backend == 'mongodb':
+elif get_config().db_backend == "mongodb":
     raise NotImplemented()
 else:
     raise Exception("Invalid backend provided: redis, neo4j, mongodb")
@@ -17,6 +17,3 @@ else:
 
 async def get_repository() -> ConceptDescriptionRepository:
     return cd_repository
-
-
-

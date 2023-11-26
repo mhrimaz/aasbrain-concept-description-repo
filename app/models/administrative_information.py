@@ -19,24 +19,26 @@ class AdministrativeInformation(HasDataSpecification):
     def append_as_rdf(instance: "AdministrativeInformation", graph: rdflib.Graph, parent_node: rdflib.IdentifiedNode):
         node = rdflib.BNode()
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["AdministrativeInformation"]))
-        HasDataSpecification.append_as_rdf(instance,graph,node)
+        HasDataSpecification.append_as_rdf(instance, graph, node)
         if instance.version:
             graph.add((node, AASNameSpace.AAS["AdministrativeInformation/version"], rdflib.Literal(instance.version)))
         if instance.revision:
             graph.add((node, AASNameSpace.AAS["AdministrativeInformation/revision"], rdflib.Literal(instance.revision)))
         if instance.creator:
-            _, created_creator_node = instance.creator.to_rdf(graph,node)
+            _, created_creator_node = instance.creator.to_rdf(graph, node)
             graph.add((node, AASNameSpace.AAS["AdministrativeInformation/creator"], created_creator_node))
 
         if instance.templateId:
-            graph.add((node, AASNameSpace.AAS["AdministrativeInformation/templateId"], rdflib.Literal(instance.templateId)))
+            graph.add(
+                (node, AASNameSpace.AAS["AdministrativeInformation/templateId"], rdflib.Literal(instance.templateId))
+            )
 
         graph.add((parent_node, AASNameSpace.AAS["Identifiable/administration"], node))
 
     @staticmethod
     def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode):
-        #HasDataSpecification
-        hasDataSpecification = HasDataSpecification.from_rdf(graph,subject)
+        # HasDataSpecification
+        hasDataSpecification = HasDataSpecification.from_rdf(graph, subject)
 
         version_value = None
 
@@ -45,8 +47,10 @@ class AdministrativeInformation(HasDataSpecification):
         creator_value = None
 
         template_id_value = None
-        return AdministrativeInformation(version=version_value,
-                                         revision=revision_value,
-                                         creator=creator_value,
-                                         templateId=template_id_value,
-                                         embeddedDataSpecifications= hasDataSpecification.embeddedDataSpecifications)
+        return AdministrativeInformation(
+            version=version_value,
+            revision=revision_value,
+            creator=creator_value,
+            templateId=template_id_value,
+            embeddedDataSpecifications=hasDataSpecification.embeddedDataSpecifications,
+        )

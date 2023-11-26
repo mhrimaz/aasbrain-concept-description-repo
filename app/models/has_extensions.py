@@ -16,12 +16,11 @@ class HasExtensions(BaseModel):
 
     @staticmethod
     def append_as_rdf(instance: "HasExtensions", graph: rdflib.Graph, parent_node: rdflib.IdentifiedNode):
-        if instance.extensions and len(instance.extensions)>0:
-            for idx,extension in enumerate(instance.extensions):
-                _,created_node = extension.to_rdf(graph,parent_node)
+        if instance.extensions and len(instance.extensions) > 0:
+            for idx, extension in enumerate(instance.extensions):
+                _, created_node = extension.to_rdf(graph, parent_node)
                 graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
-                graph.add((parent_node,AASNameSpace.AAS['HasExtensions/extensions'],created_node))
-
+                graph.add((parent_node, AASNameSpace.AAS["HasExtensions/extensions"], created_node))
 
     @staticmethod
     def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode):
@@ -30,6 +29,6 @@ class HasExtensions(BaseModel):
         for extension_ref in graph.objects(subject=subject, predicate=AASNameSpace.AAS["HasExtensions/extensions"]):
             extensions.append(Extension.from_rdf(graph, extension_ref))
 
-        if len(extensions)==0:
-            extensions=None
+        if len(extensions) == 0:
+            extensions = None
         return HasExtensions(extensions=extensions)

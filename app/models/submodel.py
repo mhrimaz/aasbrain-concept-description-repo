@@ -21,8 +21,6 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
     #     None, min_items=0, discriminator="modelType"
     # )
     # pydantic is not so nice with polymorphism so I can't simply say array of SubmodelElements
-    submodelElements: List[Union[Property, MultiLanguageProperty]] = Field(
-        None, min_items=0, discriminator="modelType"
-    )
+    submodelElements: List[Union[Property, MultiLanguageProperty]] = Field(None, min_items=0, discriminator="modelType")
 
     modelType: ModelType = ModelType.Submodel

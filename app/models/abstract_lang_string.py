@@ -11,4 +11,3 @@ from app.models.rdfiable import RDFiable
 class AbstractLangString(BaseModel):
     language: str
     text: constr(min_length=1)
-

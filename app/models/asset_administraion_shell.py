@@ -7,6 +7,7 @@ from app.models.has_data_specification import HasDataSpecification
 from app.models.identifiable import Identifiable
 from app.models.reference import Reference
 
+
 class AssetAdministrationShell(Identifiable, HasDataSpecification):
     derivedFrom: Optional[Reference] = None
     assetInformation: AssetInformation

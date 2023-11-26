@@ -30,9 +30,7 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
     async def close_database_connection(self):
         self.client = None
 
-    async def get_concept_descriptions(
-        self, query: dict, cursor=None, limit=100
-    ) -> GetConceptDescriptionsResult:
+    async def get_concept_descriptions(self, query: dict, cursor=None, limit=100) -> GetConceptDescriptionsResult:
         concepts = []
         if cursor is None:
             cursor = 0
@@ -54,22 +52,16 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
             }
         )
 
-    async def get_concept_description(
-        self, cd_id_base64url_encoded: str
-    ) -> ConceptDescription:
+    async def get_concept_description(self, cd_id_base64url_encoded: str) -> ConceptDescription:
         result = self.client.get(cd_id_base64url_encoded)
         if result is None:
             raise ConceptNotFoundException("Not exist")
         return ConceptDescription.model_validate(json.loads(result))
 
-    async def add_concept_description(
-        self, concept_description: ConceptDescription
-    ) -> ConceptDescription:
+    async def add_concept_description(self, concept_description: ConceptDescription) -> ConceptDescription:
         base64_id = base_64_url_encode(concept_description.id)
         # nx flag already checks, it will only works if id does not exist.
-        result = self.client.set(
-            base64_id, concept_description.model_dump_json(exclude_none=True), nx=True
-        )
+        result = self.client.set(base64_id, concept_description.model_dump_json(exclude_none=True), nx=True)
         if result:
             return concept_description
 
@@ -86,7 +78,7 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
         result = self.client.set(base64_id, concept_description.model_dump_json(exclude_none=True), xx=True)
         if result:
             key = cd_id_base64url_encoded + "-history"
-            print("DIFF",key)
+            print("DIFF", key)
 
             return True
         raise ConceptNotFoundException()
@@ -100,6 +92,6 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
     async def get_concept_description_history(
         self, cd_id_base64url_encoded: str, cursor=None, limit=100
     ) -> GetConceptDescriptionsResult:
-        key = cd_id_base64url_encoded+'-history'
+        key = cd_id_base64url_encoded + "-history"
 
         pass

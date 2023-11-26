@@ -7,15 +7,14 @@ from app.models.response import GetConceptDescriptionsResult, Result, Repository
 
 
 def base_64_url_encode(data: str) -> str:
-    return urlsafe_b64encode(data.encode('utf-8')).rstrip(b"=").decode('utf-8')
+    return urlsafe_b64encode(data.encode("utf-8")).rstrip(b"=").decode("utf-8")
 
 
 def base_64_url_decode(base_64_url: str) -> str:
-    return urlsafe_b64decode(base_64_url + '=' * (4 - len(base_64_url) % 4)).decode('utf-8')
+    return urlsafe_b64decode(base_64_url + "=" * (4 - len(base_64_url) % 4)).decode("utf-8")
 
 
 class ConceptDescriptionRepository(object):
-
     @abstractmethod
     async def connect_to_database(self, db_setting: dict):
         pass
@@ -38,7 +37,7 @@ class ConceptDescriptionRepository(object):
 
     @abstractmethod
     async def update_concept_description(
-            self, cd_id_base64url_encoded: str, concept_description: ConceptDescription
+        self, cd_id_base64url_encoded: str, concept_description: ConceptDescription
     ) -> bool:
         pass
 
@@ -51,6 +50,6 @@ class ConceptDescriptionRepository(object):
 
     @abstractmethod
     async def get_concept_description_history(
-            self, cd_id_base64url_encoded: str, cursor=None, limit=100
+        self, cd_id_base64url_encoded: str, cursor=None, limit=100
     ) -> GetConceptDescriptionsResult:
         pass

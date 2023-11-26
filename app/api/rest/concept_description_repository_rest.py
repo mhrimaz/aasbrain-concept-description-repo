@@ -19,9 +19,11 @@ from app.models.response import (
 from app.repository import ConceptDescriptionRepository, get_repository
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
+
 # TODO: Toooo long, refactor and break
 
 router = APIRouter()
+
 
 @router.get(
     "/concept-descriptions",
@@ -29,7 +31,7 @@ router = APIRouter()
     responses={
         200: {
             "description": "Requested Concept Descriptions",
-            "model":GetConceptDescriptionsResult,
+            "model": GetConceptDescriptionsResult,
         },
         400: {
             "model": Result,
@@ -53,34 +55,25 @@ router = APIRouter()
     tags=["Concept Description API"],
 )
 async def get_concept_descriptions(
-    idShort: Optional[str] = fastapi.Query(
-        None, description="The Concept Description’s IdShort"
-    ),
-    isCaseOf: Optional[str] = fastapi.Query(
-        None, description="IsCaseOf reference (UTF8-BASE64-URL-encoded)"
-    ),
+    idShort: Optional[str] = fastapi.Query(None, description="The Concept Description’s IdShort"),
+    isCaseOf: Optional[str] = fastapi.Query(None, description="IsCaseOf reference (UTF8-BASE64-URL-encoded)"),
     dataSpecificationRef: Optional[str] = fastapi.Query(
         None, description="DataSpecification reference (UTF8-BASE64-URL-encoded)"
     ),
-    limit: Optional[int] = fastapi.Query(
-        100, description="The maximum number of elements in the response array", ge=1
-    ),
+    limit: Optional[int] = fastapi.Query(100, description="The maximum number of elements in the response array", ge=1),
     cursor: Optional[str] = fastapi.Query(
         None,
         description="A server-generated identifier retrieved from pagingMetadata"
         " that specifies from which position the result listing should continue",
     ),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-
 ):
-
     result = await cd_repository.get_concept_descriptions(
-        query={'idShort':idShort,'isCaseOf':isCaseOf,'dataSpecificationRef':dataSpecificationRef},
+        query={"idShort": idShort, "isCaseOf": isCaseOf, "dataSpecificationRef": dataSpecificationRef},
         cursor=cursor,
-        limit=limit)
-    return JSONResponse(
-        json.loads(result.model_dump_json(exclude_none=True)), status_code=200
+        limit=limit,
     )
+    return JSONResponse(json.loads(result.model_dump_json(exclude_none=True)), status_code=200)
 
 
 @router.post(
@@ -106,21 +99,17 @@ async def get_concept_descriptions(
             "description": "Default error handling for unmentioned status codes",
         },
     },
-    openapi_extra={
-        "x-semanticIds": ["https://admin-shell.io/aas/API/PostConceptDescription/3/0"]
-    },
+    openapi_extra={"x-semanticIds": ["https://admin-shell.io/aas/API/PostConceptDescription/3/0"]},
     tags=["Concept Description API"],
 )
 async def post_concept_description(
     concept_description: ConceptDescription = fastapi.Body(
-        ..., description="Concept Description object",examples=[{'id':'MyConcept','modelType':'ConceptDescription'}]
+        ..., description="Concept Description object", examples=[{"id": "MyConcept", "modelType": "ConceptDescription"}]
     ),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
     result = await cd_repository.add_concept_description(concept_description)
-    return JSONResponse(
-        json.loads(result.model_dump_json(exclude_none=True)), status_code=201
-    )
+    return JSONResponse(json.loads(result.model_dump_json(exclude_none=True)), status_code=201)
 
 
 @router.get(
@@ -130,39 +119,28 @@ async def post_concept_description(
         200: {
             "model": ConceptDescription,
             "description": "Requested Concept Description",
-            'content': {
-                'application/json': {
-                    "example":ConceptDescription(id="something_8ccad77f")
+            "content": {
+                "application/json": {"example": ConceptDescription(id="something_8ccad77f")},
+                "application/ld+json": {
+                    "example": [
+                        {
+                            "@id": "/something_8ccad77f",
+                            "@type": ["https://admin-shell.io/aas/3/0/ConceptDescription"],
+                            "https://admin-shell.io/aas/3/0/Identifiable/administration": [
+                                {"@value": "something_8ccad77f"}
+                            ],
+                            "https://admin-shell.io/aas/3/0/Identifiable/id": [{"@value": "something_8ccad77f"}],
+                        }
+                    ]
                 },
-                'application/ld+json':{
-                   'example':[
-  {
-    "@id": "/something_8ccad77f",
-    "@type": [
-      "https://admin-shell.io/aas/3/0/ConceptDescription"
-    ],
-    "https://admin-shell.io/aas/3/0/Identifiable/administration": [
-      {
-        "@value": "something_8ccad77f"
-      }
-    ],
-    "https://admin-shell.io/aas/3/0/Identifiable/id": [
-      {
-        "@value": "something_8ccad77f"
-      }
-    ]
-  }
-]
-
-                },
-                'application/xml': {
-                'example': """<conceptDescription xmlns="https://admin-shell.io/aas/3/0">
+                "application/xml": {
+                    "example": """<conceptDescription xmlns="https://admin-shell.io/aas/3/0">
     <id>something_8ccad77f</id>
 </conceptDescription>
                 """,
-                'schema': {'type': 'object', 'format': 'xml' , "xml":{"name":"conceptDescription"}}
+                    "schema": {"type": "object", "format": "xml", "xml": {"name": "conceptDescription"}},
                 },
-                'text/turtle': {
+                "text/turtle": {
                     "example": """@prefix aas: <https://admin-shell.io/aas/3/0/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -174,7 +152,7 @@ async def post_concept_description(
 .
                     """
                 },
-            }
+            },
         },
         400: {
             "model": Result,
@@ -188,31 +166,26 @@ async def post_concept_description(
             "description": "Default error handling for unmentioned status codes",
         },
     },
-    openapi_extra={
-        "x-semanticIds": [
-            "https://admin-shell.io/aas/API/GetConceptDescriptionById/3/0"
-        ]
-    },
+    openapi_extra={"x-semanticIds": ["https://admin-shell.io/aas/API/GetConceptDescriptionById/3/0"]},
     tags=["Concept Description API"],
 )
 async def get_concept_description(
     request: fastapi.Request,
-    cdIdentifier: str = fastapi.Path(
-        ..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"
-    ),
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository)
-
+    cdIdentifier: str = fastapi.Path(..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"),
+    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    content_type = request.headers.get('accept')
+    content_type = request.headers.get("accept")
     result = await cd_repository.get_concept_description(cdIdentifier)
     if content_type == "application/ld+json":
-        g,_ = result.to_rdf()
-        return fastapi.Response(content=g.serialize(format='json-ld'),media_type='application/ld+json', status_code=200)
+        g, _ = result.to_rdf()
+        return fastapi.Response(
+            content=g.serialize(format="json-ld"), media_type="application/ld+json", status_code=200
+        )
     if content_type == "text/turtle":
-        g,_ = result.to_rdf()
-        return fastapi.Response(content=g.serialize(format='turtle'),media_type='text/turtle', status_code=200)
+        g, _ = result.to_rdf()
+        return fastapi.Response(content=g.serialize(format="turtle"), media_type="text/turtle", status_code=200)
     if content_type == "application/xml":
-        raise NotImplementedError('XML serialization not supported')
+        raise NotImplementedError("XML serialization not supported")
     result = result.model_dump_json(exclude_none=True)
     return JSONResponse(json.loads(result), status_code=200)
 
@@ -235,20 +208,12 @@ async def get_concept_description(
             "description": "Default error handling for unmentioned status codes",
         },
     },
-    openapi_extra={
-        "x-semanticIds": [
-            "https://admin-shell.io/aas/API/PutConceptDescriptionById/3/0"
-        ]
-    },
+    openapi_extra={"x-semanticIds": ["https://admin-shell.io/aas/API/PutConceptDescriptionById/3/0"]},
     tags=["Concept Description API"],
 )
 async def update_concept_description(
-    cdIdentifier: str = fastapi.Path(
-        ..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"
-    ),
-    concept_description: ConceptDescription = fastapi.Body(
-        ..., description="Concept Description object"
-    ),
+    cdIdentifier: str = fastapi.Path(..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"),
+    concept_description: ConceptDescription = fastapi.Body(..., description="Concept Description object"),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
     return cd_repository.update_concept_description()
@@ -272,17 +237,11 @@ async def update_concept_description(
             "description": "Default error handling for unmentioned status codes",
         },
     },
-    openapi_extra={
-        "x-semanticIds": [
-            "https://admin-shell.io/aas/API/DeleteConceptDescriptionById/3/0"
-        ]
-    },
+    openapi_extra={"x-semanticIds": ["https://admin-shell.io/aas/API/DeleteConceptDescriptionById/3/0"]},
     tags=["Concept Description API"],
 )
 async def delete_concept_description(
-    cdIdentifier: str = fastapi.Path(
-        ..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"
-    ),
+    cdIdentifier: str = fastapi.Path(..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
     result = await cd_repository.delete_concept_description(cdIdentifier)
@@ -303,20 +262,11 @@ async def delete_concept_description(
             "description": "Default error handling for unmentioned status codes",
         },
     },
-    openapi_extra={
-        "x-semanticIds": [
-            "https://admin-shell.io/aas/API/Descriptor/GetDescription/3/0"
-        ]
-    },
+    openapi_extra={"x-semanticIds": ["https://admin-shell.io/aas/API/Descriptor/GetDescription/3/0"]},
     tags=["Description API"],
 )
 async def description():
     return JSONResponse(
-        {
-            "profiles": [
-                "https://admin-shell.io/aas/API/3/0/ConceptDescriptionServiceSpecification/SSP-001"
-            ]
-        },
+        {"profiles": ["https://admin-shell.io/aas/API/3/0/ConceptDescriptionServiceSpecification/SSP-001"]},
         status_code=200,
     )
-

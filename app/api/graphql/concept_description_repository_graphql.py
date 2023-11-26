@@ -277,9 +277,11 @@ with open(os.path.join(script_dir, "mock_concepts.json")) as mock:
         concept_descriptions.append(ConceptDescription(**cd))
 print(concept_descriptions)
 
+
 @query.field("conceptDescriptions")
-def resolve_concept_descriptions(_, info, idShort=None, isCaseOf=None, dataSpecificationRef=None, cursor=None,
-                                 limit=100):
+def resolve_concept_descriptions(
+    _, info, idShort=None, isCaseOf=None, dataSpecificationRef=None, cursor=None, limit=100
+):
     cd_list = []
     for cd in concept_descriptions:
         cd_dump = json.loads(cd.model_dump_json(exclude_none=True))

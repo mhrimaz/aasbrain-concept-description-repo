@@ -119,7 +119,7 @@ app.mount(
 
 @app.get("/health", response_model=HealthResponse, description="Health checking endpoint", tags=["Extra"])
 async def check_health() -> HealthResponse:
-    return HealthResponse(**{"status":"Obviously UP!","uptime": "Who knows?!"})
+    return HealthResponse(**{"status": "Obviously UP!", "uptime": "Who knows?!"})
 
 
 @app.exception_handler(RequestValidationError)
