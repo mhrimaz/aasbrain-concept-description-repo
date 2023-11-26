@@ -7,6 +7,10 @@ from ariadne import ObjectType, make_executable_schema
 from app.models.concept_description import ConceptDescription
 from app.models.key import Key, KeyTypes
 import os
+
+from app.repository import get_repository
+from app.repository.concept_description_repository import base_64_url_encode
+
 type_defs = """
     enum ReferenceTypes{
         ExternalReference
@@ -256,10 +260,11 @@ type_defs = """
         cursor: String!
     }
     type Query {
-        concept_descriptions(idShort: String, isCaseOf: String, dataSpecificationRef: String, cursor: String, limit: Int): ConceptDescriptionsResult!
-        concept_description(cdIdentifier: String!): ConceptDescription!
+        conceptDescriptions(idShort: String, isCaseOf: String, dataSpecificationRef: String, cursor: String, limit: Int): ConceptDescriptionsResult!
+        conceptDescription(id: String!): ConceptDescription!
     }
 """
+
 
 query = QueryType()
 
@@ -271,7 +276,8 @@ with open(os.path.join(script_dir, "mock_concepts.json")) as mock:
     for cd in cds:
         concept_descriptions.append(ConceptDescription(**cd))
 print(concept_descriptions)
-@query.field("concept_descriptions")
+
+@query.field("conceptDescriptions")
 def resolve_concept_descriptions(_, info, idShort=None, isCaseOf=None, dataSpecificationRef=None, cursor=None,
                                  limit=100):
     cd_list = []
@@ -281,9 +287,12 @@ def resolve_concept_descriptions(_, info, idShort=None, isCaseOf=None, dataSpeci
     return {"nodes": cd_list, "cursor": "NotImplemented"}
 
 
-@query.field("concept_description")
-def resolve_concept_description(_, info, cdIdentifier):
-    print(cdIdentifier)
+@query.field("conceptDescription")
+async def resolve_concept_description(_, info, id):
+    # TODO: this should be efficient
+    cd_repository = await get_repository()
+    base64_id = base_64_url_encode(id)
+    print(await cd_repository.get_concept_description(base64_id))
     cd_list = []
     for cd in concept_descriptions:
         cd_dump = json.loads(cd.model_dump_json(exclude_none=True))

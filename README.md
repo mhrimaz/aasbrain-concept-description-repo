@@ -7,16 +7,15 @@ AAS Brain features solutions and tries to overcome existing limitations and prop
 
 **AAS is great, but let's make it even better**
 
-You need to create a lot of Concept Descriptions at the same time? it is here!
+- You need to create a lot of Concept Descriptions at the same time? Use the Bulk API
 
-Do you need to get multiple Concept Descriptions in one call? it is here!
+- Do you need to get multiple Concept Descriptions in one call? Use the Bulk API
 
-REST API interaction doesn't fit for your client side that only needs the unit symbol? Simply avoid overfetching and underfetching by using GraphQL. Get what you need!
+- REST API interaction doesn't fit for your client side that only needs the unit symbol? Simply avoid overfetching and underfetching by using GraphQL. Use GraphQL endpoint.
 
+- What is the relationship between concepts? Can I have a cluster view? Can I use my industrial Ontology? Our semantic backend is just for that, contact us!
 
-What is the relationship between concepts? Can I have a cluster view? Can I use my industrial Ontology? Our semantic backend is just for that, contact us!
-
-I don't need an API, I need a user interface. Do you have something like that? We have, contact us!
+- I don't need an API, I need a user interface. Do you have something like that? We have, contact us!
 
 **Which backend is the best?**
 

@@ -9,6 +9,7 @@ from app.models.response import (
     Result,
     ConceptNotFoundException,
     DuplicateConceptException,
+    UpdatePayloadIDMismatchException,
 )
 from app.repository import ConceptDescriptionRepository
 from datetime import datetime, timezone
@@ -22,7 +23,7 @@ from app.repository.concept_description_repository import (
 class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
     client: redis.Redis = None
 
-    async def connect_to_database(self, db_setting: dict):
+    async def connect_to_database(self, db_setting: dict, history=True):
         self.client = redis.Redis.from_url(db_setting["DB_URI"])
         self.client.ping()
 
@@ -37,7 +38,7 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
             cursor = 0
         else:
             cursor = int(base_64_url_decode(cursor))
-        partial_cursor, partial_keys = self.client.scan(cursor=cursor, count=3)
+        partial_cursor, partial_keys = self.client.scan(cursor=cursor, count=limit)
         for key in partial_keys:
             cd = self.client.get(key)
             concepts.append(json.loads(cd))
@@ -65,23 +66,40 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
         self, concept_description: ConceptDescription
     ) -> ConceptDescription:
         base64_id = base_64_url_encode(concept_description.id)
+        # nx flag already checks, it will only works if id does not exist.
         result = self.client.set(
             base64_id, concept_description.model_dump_json(exclude_none=True), nx=True
         )
         if result:
             return concept_description
 
-        raise DuplicateConceptException("Already exists, or another reason")
+        raise DuplicateConceptException()
 
     async def update_concept_description(
         self, cd_id_base64url_encoded: str, concept_description: ConceptDescription
     ) -> bool:
-        pass
+        base64_id = base_64_url_encode(concept_description.id)
+        # check that the provided id in concept description payload is same
+        if base64_id != cd_id_base64url_encoded:
+            raise UpdatePayloadIDMismatchException()
+
+        result = self.client.set(base64_id, concept_description.model_dump_json(exclude_none=True), xx=True)
+        if result:
+            key = cd_id_base64url_encoded + "-history"
+            print("DIFF",key)
+
+            return True
+        raise ConceptNotFoundException()
 
     async def delete_concept_description(self, cd_id_base64url_encoded: str) -> bool:
-        pass
+        response = self.client.delete(cd_id_base64url_encoded)
+        if response == 0:
+            raise ConceptNotFoundException()
+        return True
 
     async def get_concept_description_history(
         self, cd_id_base64url_encoded: str, cursor=None, limit=100
     ) -> GetConceptDescriptionsResult:
+        key = cd_id_base64url_encoded+'-history'
+
         pass

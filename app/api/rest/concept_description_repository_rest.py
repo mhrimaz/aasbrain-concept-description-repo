@@ -1,8 +1,12 @@
 import json
 from typing import Optional
 
-from fastapi import APIRouter
+import rdflib
+from fastapi import APIRouter, Header
 import fastapi
+from fastapi.openapi.docs import get_redoc_html
+from rdflib import Graph
+
 from app.models.concept_description import ConceptDescription
 from app.models.response import (
     GetConceptDescriptionsResult,
@@ -10,21 +14,22 @@ from app.models.response import (
     ServiceDescription,
     DatabaseConnectionException,
     ConceptNotFoundException,
+    Message,
 )
 from app.repository import ConceptDescriptionRepository, get_repository
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
+# TODO: Toooo long, refactor and break
 
 router = APIRouter()
-
 
 @router.get(
     "/concept-descriptions",
     summary="Returns all Concept Descriptions",
     responses={
         200: {
-            "model": GetConceptDescriptionsResult,
             "description": "Requested Concept Descriptions",
+            "model":GetConceptDescriptionsResult,
         },
         400: {
             "model": Result,
@@ -66,10 +71,13 @@ async def get_concept_descriptions(
         " that specifies from which position the result listing should continue",
     ),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
+
 ):
+
     result = await cd_repository.get_concept_descriptions(
-        {}, cursor=cursor, limit=limit
-    )
+        query={'idShort':idShort,'isCaseOf':isCaseOf,'dataSpecificationRef':dataSpecificationRef},
+        cursor=cursor,
+        limit=limit)
     return JSONResponse(
         json.loads(result.model_dump_json(exclude_none=True)), status_code=200
     )
@@ -105,7 +113,7 @@ async def get_concept_descriptions(
 )
 async def post_concept_description(
     concept_description: ConceptDescription = fastapi.Body(
-        ..., description="Concept Description object"
+        ..., description="Concept Description object",examples=[{'id':'MyConcept','modelType':'ConceptDescription'}]
     ),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
@@ -122,6 +130,51 @@ async def post_concept_description(
         200: {
             "model": ConceptDescription,
             "description": "Requested Concept Description",
+            'content': {
+                'application/json': {
+                    "example":ConceptDescription(id="something_8ccad77f")
+                },
+                'application/ld+json':{
+                   'example':[
+  {
+    "@id": "/something_8ccad77f",
+    "@type": [
+      "https://admin-shell.io/aas/3/0/ConceptDescription"
+    ],
+    "https://admin-shell.io/aas/3/0/Identifiable/administration": [
+      {
+        "@value": "something_8ccad77f"
+      }
+    ],
+    "https://admin-shell.io/aas/3/0/Identifiable/id": [
+      {
+        "@value": "something_8ccad77f"
+      }
+    ]
+  }
+]
+
+                },
+                'application/xml': {
+                'example': """<conceptDescription xmlns="https://admin-shell.io/aas/3/0">
+    <id>something_8ccad77f</id>
+</conceptDescription>
+                """,
+                'schema': {'type': 'object', 'format': 'xml' , "xml":{"name":"conceptDescription"}}
+                },
+                'text/turtle': {
+                    "example": """@prefix aas: <https://admin-shell.io/aas/3/0/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema#> .
+
+<something_8ccad77f> rdf:type aas:ConceptDescription ;
+    <https://admin-shell.io/aas/3/0/Identifiable/id> "something_8ccad77f"^^xs:string ;
+.
+                    """
+                },
+            }
         },
         400: {
             "model": Result,
@@ -143,12 +196,23 @@ async def post_concept_description(
     tags=["Concept Description API"],
 )
 async def get_concept_description(
+    request: fastapi.Request,
     cdIdentifier: str = fastapi.Path(
         ..., description="The Concept Description’s unique id (UTF8-BASE64-URL-encoded)"
     ),
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
+    cd_repository: ConceptDescriptionRepository = Depends(get_repository)
+
 ):
+    content_type = request.headers.get('accept')
     result = await cd_repository.get_concept_description(cdIdentifier)
+    if content_type == "application/ld+json":
+        g,_ = result.to_rdf()
+        return fastapi.Response(content=g.serialize(format='json-ld'),media_type='application/ld+json', status_code=200)
+    if content_type == "text/turtle":
+        g,_ = result.to_rdf()
+        return fastapi.Response(content=g.serialize(format='turtle'),media_type='text/turtle', status_code=200)
+    if content_type == "application/xml":
+        raise NotImplementedError('XML serialization not supported')
     result = result.model_dump_json(exclude_none=True)
     return JSONResponse(json.loads(result), status_code=200)
 
@@ -187,7 +251,7 @@ async def update_concept_description(
     ),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    return {"status": "UP"}
+    return cd_repository.update_concept_description()
 
 
 @router.delete(
@@ -221,7 +285,11 @@ async def delete_concept_description(
     ),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    return {"status": "UP"}
+    result = await cd_repository.delete_concept_description(cdIdentifier)
+    if result:
+        return fastapi.Response(status_code=204)
+
+    raise NotImplementedError("TODO: Delete Error exception handling not complete")
 
 
 @router.get(
@@ -252,21 +320,3 @@ async def description():
         status_code=200,
     )
 
-
-@router.delete("/concept-descriptions/{cdIdentifier}/history", tags=["Extra"])
-async def get_concept_description_history_metadata(
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    return {"status": "UP"}
-
-
-@router.delete("/concept-descriptions/{cdIdentifier}/history/{version}", tags=["Extra"])
-async def get_concept_description_history(
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    return {"status": "UP"}
-
-
-@router.get("/concept-descriptions/metadata", tags=["Extra"])
-async def concept_descriptions_metadata():
-    return {"status": "UP"}
