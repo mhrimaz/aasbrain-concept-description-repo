@@ -50,7 +50,7 @@ async def search_concept_descriptions(
     concepts: List[ConceptDescription],
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    raise NotImplementedError("History metadata endpoint not implemented.")
+    raise NotImplementedError("Search endpoint not implemented.")
 
 
 @router.post("/concept-descriptions:bulkCreate", tags=["Extra"])
@@ -58,7 +58,7 @@ async def atomic_bulk_create_concept_descriptions(
     concepts: List[ConceptDescription],
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    raise NotImplementedError("History metadata endpoint not implemented.")
+    raise NotImplementedError("Bulk create endpoint not implemented.")
 
 
 @router.post("/concept-descriptions:bulkDelete", tags=["Extra"])
@@ -66,7 +66,7 @@ async def atomic_bulk_delete_concept_descriptions(
     concepts_id: List[str],
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    raise NotImplementedError("History metadata endpoint not implemented.")
+    raise NotImplementedError("Bulk delete endpoint not implemented.")
 
 
 @router.post("/concept-descriptions:bulkUpdate", tags=["Extra"])
@@ -74,4 +74,4 @@ async def atomic_bulk_update_concept_descriptions(
     concepts: List[ConceptDescription],
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    raise NotImplementedError("History metadata endpoint not implemented.")
+    raise NotImplementedError("Bulk update endpoint not implemented.")

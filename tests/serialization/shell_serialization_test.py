@@ -21,34 +21,6 @@ from app.models.submodel import Submodel
 from tests.model_test import get_testdata_json, get_testdata_rdf
 
 
-def test_minimal_asset_information_rdf_to_json():
-    payload = get_testdata_rdf("AssetInformation", "maximal")
-    g = Graph()
-    g.parse(data=payload)
-    pred = rdflib.URIRef(AASNameSpace.AAS["AssetAdministrationShell/assetInformation"])
-    for o in g.objects(predicate=pred):
-        print(g.resource(o))
-    assert payload == payload
-
-
-def test_maximal_asset_information_json_to_rdf():
-    payload = get_testdata_json("AssetInformation", "maximal")
-    element = AssetInformation(**json.loads(payload)["assetAdministrationShells"][0]["assetInformation"])
-    node_graph, new_graph = element.to_rdf()
-    assert payload == payload
-
-
-def test_maximal_asset_information_json_to_rdf():
-    payload = get_testdata_json("AssetInformation", "maximal")
-    element = AssetInformation(**json.loads(payload)["assetAdministrationShells"][0]["assetInformation"])
-    node_graph, new_graph = element.to_rdf()
-    for asset_information_subject in new_graph.subjects(
-        predicate=RDF.type, object=AASNameSpace.AAS["AssetInformation"], unique=True
-    ):
-        asset = AssetInformation.from_rdf(new_graph, asset_information_subject)
-    assert payload == payload
-
-
 def test_key_to_rdf():
     payload = Key(**{"type": "AssetAdministrationShell", "value": "example"})
     graph, created_node = payload.to_rdf()
@@ -118,8 +90,6 @@ def test_concept_description_to_rdf():
     payload_json = json.loads(get_testdata_json("ConceptDescription", "maximal"))["conceptDescriptions"][0]
     payload = ConceptDescription(**payload_json)
     graph, created_node = payload.to_rdf()
-    print(graph.serialize())
     re_created = ConceptDescription.from_rdf(graph, created_node)
     g2 = Graph().parse(data=graph.serialize())
-    print(g2.serialize(format="turtle_custom"))
     assert re_created == payload
