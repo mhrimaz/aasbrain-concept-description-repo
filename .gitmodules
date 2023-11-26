@@ -1,4 +1,0 @@
-[submodule "tests/schemas"]
-	path = tests/schemas
-	url = https://github.com/admin-shell-io/aas-specs
-
