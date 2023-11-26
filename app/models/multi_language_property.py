@@ -10,6 +10,6 @@ from app.models.reference import Reference
 
 
 class MultiLanguageProperty(DataElement):
-    value: Optional[List[LangStringTextType]] = Field(None, min_items=1)
+    value: Optional[List[LangStringTextType]] = Field(None, min_length=1)
     valueId: Optional[Reference] = None
     modelType: Literal["MultiLanguageProperty"]
