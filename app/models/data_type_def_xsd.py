@@ -34,4 +34,5 @@ class DataTypeDefXsd(Enum):
     xs_unsignedByte = 'xs:unsignedByte'
     xs_unsignedInt = 'xs:unsignedInt'
     xs_unsignedLong = 'xs:unsignedLong'
-    xs_unsignedShort = 'xs:unsignedShort'
+    UnsignedShort = 'xs:unsignedShort'
+

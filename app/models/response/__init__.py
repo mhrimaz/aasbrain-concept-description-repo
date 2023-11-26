@@ -43,8 +43,9 @@ class RepositoryMetadata(BaseModel):
 
 
 class ServiceDescription(BaseModel):
-    profiles: Literal[
-        "https://admin-shell.io/aas/API/3/0/AssetAdministrationShellServiceSpecification/SSP-001", "https://admin-shell.io/aas/API/3/0/AssetAdministrationShellServiceSpecification/SSP-002"
+    profiles: List[Literal[
+        "https://admin-shell.io/aas/API/3/0/AssetAdministrationShellServiceSpecification/SSP-001"
+        , "https://admin-shell.io/aas/API/3/0/AssetAdministrationShellServiceSpecification/SSP-002"
         , "https://admin-shell.io/aas/API/3/0/SubmodelServiceSpecification/SSP-001"
         , "https://admin-shell.io/aas/API/3/0/SubmodelServiceSpecification/SSP-002"
         , "https://admin-shell.io/aas/API/3/0/SubmodelServiceSpecification/SSP-003"
@@ -60,28 +61,46 @@ class ServiceDescription(BaseModel):
         , "https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-002"
         , "https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-003"
         , "https://admin-shell.io/aas/API/3/0/SubmodelRepositoryServiceSpecification/SSP-004"
-        , "https://admin-shell.io/aas/API/3/0/ConceptDescriptionServiceSpecification/SSP-001"]
+        , "https://admin-shell.io/aas/API/3/0/ConceptDescriptionServiceSpecification/SSP-001"]]
 
 
 class HealthResponse(BaseModel):
+    status: str
     uptime: str
 
 
 class DatabaseConnectionException(Exception):
     """Unable to reach database"""
+    error_code = 500
     pass
 
 
 class ConceptNotFoundException(Exception):
     """The concept description does not exists."""
+    error_code = 404
     pass
 
 
 class DuplicateConceptException(Exception):
     """The concept description already exists."""
+    error_code = 400
     pass
 
 
-class UpdatePayloadMismatchException(Exception):
+class UpdatePayloadIDMismatchException(Exception):
     """The provided base64-url-encoded-id does not match with the provided id in the payload."""
+    error_code = 400
     pass
+
+
+class InvalidPayloadException(Exception):
+    """The provided payload does not comply with AAS specification."""
+    error_code = 400
+    pass
+
+
+class OperationNotAllowedException(Exception):
+    """This operation is not allowed."""
+    error_code = 403
+    pass
+
