@@ -32,4 +32,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: aas-brain-concept-description-repo:latest
+        tags: mhrimaz/aas-brain-concept-description-repo:latest
