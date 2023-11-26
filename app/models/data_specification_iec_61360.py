@@ -177,18 +177,18 @@ class ValueReferencePair(BaseModel, RDFiable):
 
 
 class ValueList(BaseModel, RDFiable):
-    valueReferencePairs: List[ValueReferencePair] = Field(..., min_items=1)
+    valueReferencePairs: List[ValueReferencePair] = Field(..., min_length=1)
 
 
 class DataSpecificationIec61360(BaseModel, RDFiable):
-    preferredName: List[LangStringPreferredNameTypeIec61360] = Field(..., min_items=1)
-    shortName: Optional[List[LangStringShortNameTypeIec61360]] = Field(None, min_items=1)
+    preferredName: List[LangStringPreferredNameTypeIec61360] = Field(..., min_length=1)
+    shortName: Optional[List[LangStringShortNameTypeIec61360]] = Field(None, min_length=1)
     unit: Optional[constr(min_length=1)] = None
     unitId: Optional[Reference] = None
     sourceOfDefinition: Optional[constr(min_length=1)] = None
     symbol: Optional[constr(min_length=1)] = None
     dataType: Optional[DataTypeIec61360] = None
-    definition: Optional[List[LangStringDefinitionTypeIec61360]] = Field(None, min_items=1)
+    definition: Optional[List[LangStringDefinitionTypeIec61360]] = Field(None, min_length=1)
     valueFormat: Optional[constr(min_length=1)] = None
     valueList: Optional[ValueList] = None
     value: Optional[constr(min_length=1, max_length=2000)] = None

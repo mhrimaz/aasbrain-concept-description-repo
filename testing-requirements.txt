@@ -6,3 +6,5 @@ pytest-trio
 pytest-tornasync
 black
 flake8
+pytest-html
+pytest-cov

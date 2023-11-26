@@ -16,7 +16,7 @@ from app.models.reference import Reference
 
 
 class ConceptDescription(Identifiable, HasDataSpecification, RDFiable):
-    isCaseOf: Optional[List[Reference]] = Field(None, min_items=1)
+    isCaseOf: Optional[List[Reference]] = Field(None, min_length=1)
     modelType: ModelType = ModelType.ConceptDescription
 
     def to_rdf(

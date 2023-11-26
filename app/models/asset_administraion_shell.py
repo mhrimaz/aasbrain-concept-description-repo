@@ -11,5 +11,5 @@ from app.models.reference import Reference
 class AssetAdministrationShell(Identifiable, HasDataSpecification):
     derivedFrom: Optional[Reference] = None
     assetInformation: AssetInformation
-    submodels: Optional[List[Reference]] = Field(None, min_items=1)
+    submodels: Optional[List[Reference]] = Field(None, min_length=1)
     modelType: str = Field("AssetAdministrationShell", const=True)

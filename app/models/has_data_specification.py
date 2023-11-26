@@ -9,7 +9,7 @@ from app.models.embedded_data_specification import EmbeddedDataSpecification
 
 
 class HasDataSpecification(BaseModel):
-    embeddedDataSpecifications: Optional[List[EmbeddedDataSpecification]] = Field(None, min_items=1)
+    embeddedDataSpecifications: Optional[List[EmbeddedDataSpecification]] = Field(None, min_length=1)
 
     @staticmethod
     def append_as_rdf(instance: "HasDataSpecification", graph: rdflib.Graph, parent_node: rdflib.IdentifiedNode):

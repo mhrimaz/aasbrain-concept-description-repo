@@ -8,4 +8,4 @@ from app.models.qualifier import Qualifier
 
 
 class Qualifiable(BaseModel):
-    qualifiers: Optional[List[Qualifier]] = Field(None, min_items=1)
+    qualifiers: Optional[List[Qualifier]] = Field(None, min_length=1)

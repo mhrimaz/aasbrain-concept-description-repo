@@ -24,7 +24,7 @@ class AssetInformation(BaseModel):
             max_length=2000,
         )
     ] = None
-    specificAssetIds: Optional[List[SpecificAssetId]] = Field(None, min_items=1)
+    specificAssetIds: Optional[List[SpecificAssetId]] = Field(None, min_length=1)
     assetType: Optional[
         constr(
             min_length=1,

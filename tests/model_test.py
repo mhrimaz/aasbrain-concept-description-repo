@@ -8,16 +8,28 @@ import json
 from app.models.property import Property
 from app.models.submodel import Submodel
 
-def get_testdata_rdf(element: str, type='minimal'):
+
+def get_testdata_rdf(element: str, type="minimal"):
     content = None
-    with open(os.path.join(os.path.dirname(__file__),'schemas','schemas','rdf','examples','generated',element,f'{type}.ttl')) as f:
+    with open(
+        os.path.join(
+            os.path.dirname(__file__), "schemas", "schemas", "rdf", "examples", "generated", element, f"{type}.ttl"
+        )
+    ) as f:
         content = f.read()
     return content
-def get_testdata_json(element: str, type='minimal'):
+
+
+def get_testdata_json(element: str, type="minimal"):
     content = None
-    with open(os.path.join(os.path.dirname(__file__),'schemas','schemas','json','examples','generated',element,f'{type}.json')) as f:
+    with open(
+        os.path.join(
+            os.path.dirname(__file__), "schemas", "schemas", "json", "examples", "generated", element, f"{type}.json"
+        )
+    ) as f:
         content = f.read()
     return content
+
 
 def test_minimal_concept_description():
     concept_description = {
@@ -35,96 +47,68 @@ def test_minimal_concept_description_rdf():
         "modelType": "ConceptDescription",
     }
     cd = ConceptDescription(**concept_description)
-    print(cd.to_rdf().serialize(format="turtle"))
     cd_dump = cd.model_dump_json(exclude_none=True)
     assert json.loads(cd_dump) == concept_description
 
+
 def test_maximal_concept_description_rdf():
     concept_description = {
-      "administration": {"revision": "0",
-        "version": "1230"},
-      "category": "something_07a45fb3",
-      "description": [
-        {
-          "language": "Tvwqa-500-8EQd-y-8f5-k-vqdMn7-Ohw9-CcA628-DHKP-hPAjUZ-cnr1REUf-S8-p-9X0r-wtCI-KunG3uzI-7dGUsrTu-fY7-C3-hFN-Y-ML69DgnJ-0-Y0H-TLACBVB-Z0HRibbz-yzSf8dvR-zAn-B-6h8VjcKX-jnwR-0Z8l-ghRIZ7mo-wZG7-zXHdSIV-Oy-8dH00A6L-nJY2dA1-57o8dQ-RpxkBTbE-qBJR-M-DyGDA3U-aguRfIhj-x-XmO-1u",
-          "text": "something_863a162e"
-        }
-      ],
-      "displayName": [
-        {
-          "language": "x-Sw4u3ZDO-nJLabnE",
-          "text": "something_c7c0c4c8"
-        }
-      ],
-      "embeddedDataSpecifications": [
-        {
-          "dataSpecification": {
-            "keys": [
-              {
-                "type": "Submodel",
-                "value": "urn:example14:c4971d26"
-              }
-            ],
-            "type": "ModelReference"
-          },
-          "dataSpecificationContent": {
-            "modelType": "DataSpecificationIec61360",
-            "preferredName": [
-              {
-                "language": "de-CH",
-                "text": "something_34113ec1"
-              },
-              {
-                "language": "en-UK",
-                "text": "Something random in English 19945c14"
-              }
-            ],
-            "value": "something_a864dcb4"
-          }
-        }
-      ],
-      "extensions": [
-          {
-    "name": "something_aae6caf4",
-    "refersTo": [
-        {
-            "keys": [{"type": "Submodel", "value": "urn:another-example01:f7faa581"}],
-            "type": "ModelReference",
-        }
-    ],
-    "semanticId": {
-        "keys": [
-            {"type": "GlobalReference", "value": "urn:another-company07:4d1bd2cb"}
-        ],
-        "type": "ExternalReference",
-    },
-    "supplementalSemanticIds": [
-        {
-            "keys": [{"type": "GlobalReference", "value": "urn:an-example13:be48ff29"}],
-            "type": "ExternalReference",
-        }
-    ],
-    "value": "10233",
-    "valueType": "xs:unsignedShort",
-}
-      ],
-      "id": "something_8ccad77f",
-      "idShort": "fiZ",
-      "isCaseOf": [
-        {
-          "keys": [
+        "administration": {"revision": "0", "version": "1230"},
+        "category": "something_07a45fb3",
+        "description": [
             {
-              "type": "GlobalReference",
-              "value": "urn:some-company09:4fffee11"
+                "language": "Tvwqa-500-8EQd-y-8f5-k-vqdMn7-Ohw9-CcA628-DHKP-hPAjUZ-cnr1REUf-S8-p-9X0r-wtCI-KunG3uzI-7dGUsrTu-fY7-C3-hFN-Y-ML69DgnJ-0-Y0H-TLACBVB-Z0HRibbz-yzSf8dvR-zAn-B-6h8VjcKX-jnwR-0Z8l-ghRIZ7mo-wZG7-zXHdSIV-Oy-8dH00A6L-nJY2dA1-57o8dQ-RpxkBTbE-qBJR-M-DyGDA3U-aguRfIhj-x-XmO-1u",
+                "text": "something_863a162e",
             }
-          ],
-          "type": "ExternalReference"
-        }
-      ],
-      "modelType": "ConceptDescription"
+        ],
+        "displayName": [{"language": "x-Sw4u3ZDO-nJLabnE", "text": "something_c7c0c4c8"}],
+        "embeddedDataSpecifications": [
+            {
+                "dataSpecification": {
+                    "keys": [{"type": "Submodel", "value": "urn:example14:c4971d26"}],
+                    "type": "ModelReference",
+                },
+                "dataSpecificationContent": {
+                    "modelType": "DataSpecificationIec61360",
+                    "preferredName": [
+                        {"language": "de-CH", "text": "something_34113ec1"},
+                        {"language": "en-UK", "text": "Something random in English 19945c14"},
+                    ],
+                    "value": "something_a864dcb4",
+                },
+            }
+        ],
+        "extensions": [
+            {
+                "name": "something_aae6caf4",
+                "refersTo": [
+                    {
+                        "keys": [{"type": "Submodel", "value": "urn:another-example01:f7faa581"}],
+                        "type": "ModelReference",
+                    }
+                ],
+                "semanticId": {
+                    "keys": [{"type": "GlobalReference", "value": "urn:another-company07:4d1bd2cb"}],
+                    "type": "ExternalReference",
+                },
+                "supplementalSemanticIds": [
+                    {
+                        "keys": [{"type": "GlobalReference", "value": "urn:an-example13:be48ff29"}],
+                        "type": "ExternalReference",
+                    }
+                ],
+                "value": "10233",
+                "valueType": "xs:unsignedShort",
+            }
+        ],
+        "id": "something_8ccad77f",
+        "idShort": "fiZ",
+        "isCaseOf": [
+            {"keys": [{"type": "GlobalReference", "value": "urn:some-company09:4fffee11"}], "type": "ExternalReference"}
+        ],
+        "modelType": "ConceptDescription",
     }
     cd = ConceptDescription(**concept_description)
-    print(cd.to_rdf().serialize(format="turtle"))
     # for (s,p,o) in cd.to_rdf():
     #     print(s,p,o)
     cd_dump = cd.model_dump_json(exclude_none=True)
@@ -156,9 +140,7 @@ def test_minimal_property():
         "embeddedDataSpecifications": [
             {
                 "dataSpecification": {
-                    "keys": [
-                        {"type": "Submodel", "value": "urn:another-company15:2bd0986b"}
-                    ],
+                    "keys": [{"type": "Submodel", "value": "urn:another-company15:2bd0986b"}],
                     "type": "ModelReference",
                 },
                 "dataSpecificationContent": {
@@ -184,9 +166,7 @@ def test_minimal_property():
         },
         "supplementalSemanticIds": [
             {
-                "keys": [
-                    {"type": "Submodel", "value": "urn:another-example10:42487f5a"}
-                ],
+                "keys": [{"type": "Submodel", "value": "urn:another-example10:42487f5a"}],
                 "type": "ModelReference",
             }
         ],
@@ -291,9 +271,7 @@ def test_submodel():
                 "modelType": "Property",
                 "qualifiers": [{"type": "something_500f973e", "valueType": "xs:long"}],
                 "semanticId": {
-                    "keys": [
-                        {"type": "GlobalReference", "value": "urn:something00:f4547d0c"}
-                    ],
+                    "keys": [{"type": "GlobalReference", "value": "urn:something00:f4547d0c"}],
                     "type": "ExternalReference",
                 },
                 "supplementalSemanticIds": [
@@ -309,9 +287,7 @@ def test_submodel():
                 ],
                 "value": "0061707",
                 "valueId": {
-                    "keys": [
-                        {"type": "Submodel", "value": "urn:some-company12:e40857e0"}
-                    ],
+                    "keys": [{"type": "Submodel", "value": "urn:some-company12:e40857e0"}],
                     "type": "ModelReference",
                 },
                 "valueType": "xs:decimal",
@@ -354,9 +330,7 @@ def test_maximal_concept_description():
         "idShort": "fiZ",
         "isCaseOf": [
             {
-                "keys": [
-                    {"type": "GlobalReference", "value": "urn:some-company09:4fffee11"}
-                ],
+                "keys": [{"type": "GlobalReference", "value": "urn:some-company09:4fffee11"}],
                 "type": "ExternalReference",
             }
         ],

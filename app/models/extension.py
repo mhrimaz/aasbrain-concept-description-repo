@@ -16,7 +16,7 @@ class Extension(HasSemantics, RDFiable):
     name: constr(min_length=1, max_length=128)
     valueType: Optional[DataTypeDefXsd] = None
     value: Optional[str] = None
-    refersTo: Optional[List[Reference]] = Field(None, min_items=1)
+    refersTo: Optional[List[Reference]] = Field(None, min_length=1)
 
     def to_rdf(
         self,
