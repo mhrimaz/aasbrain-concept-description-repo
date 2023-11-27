@@ -204,7 +204,7 @@ async def get_concept_description(
         )
     if content_type == "text/turtle":
         g, _ = result.to_rdf()
-        return fastapi.Response(content=g.serialize(format="turtle"), media_type="text/turtle", status_code=200)
+        return fastapi.Response(content=g.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
     if content_type == "application/xml":
         raise NotImplementedError("XML serialization not supported")
     result = result.model_dump_json(exclude_none=True)

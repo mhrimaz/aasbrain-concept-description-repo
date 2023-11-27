@@ -18,10 +18,37 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+from rdflib import URIRef
 from rdflib.plugins.serializers.turtle import TurtleSerializer
 
 
 class TurtleSerializerCustom(TurtleSerializer):
     def getQName(self, uri, gen_prefix=True):
-        return None
+        if not isinstance(uri, URIRef):
+            return None
+
+        parts = None
+
+        try:
+            parts = self.store.compute_qname(uri, generate=gen_prefix)
+        except Exception:
+            # is the uri a namespace in itself?
+            pfx = self.store.store.prefix(uri)
+            if pfx is not None:
+                parts = (pfx, uri, "")
+            else:
+                # nothing worked
+                return None
+
+        prefix, namespace, local = parts
+
+        local = local.replace(r"(", r"\(").replace(r")", r"\)")
+
+        # QName cannot end with .
+        if local.endswith("."):
+            return None
+        if prefix.startswith("ns"):
+            return None
+        prefix = self.addNamespace(prefix, namespace)
+
+        return "%s:%s" % (prefix, local)
