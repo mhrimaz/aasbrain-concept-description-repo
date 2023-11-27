@@ -22,8 +22,7 @@ services:
     image: traefik:v2.10
     restart: unless-stopped
     depends_on:
-      fastapi:
-        condition: service_healthy
+      - fastapi
     command:
       - "--api.insecure=false"
       - "--log.level=DEBUG"
