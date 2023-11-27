@@ -3,7 +3,7 @@ pydantic==2.5.2
 pydantic-settings==2.1.0
 uvicorn[standard]
 loguru==0.7.2
-httpx==0.24.1
+httpx==0.25.2
 websockets==11.0.3
 ariadne==0.21
 redis[hiredis]
