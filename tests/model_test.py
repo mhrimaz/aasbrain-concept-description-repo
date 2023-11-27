@@ -7,6 +7,7 @@ import json
 
 from app.models.property import Property
 from app.models.submodel import Submodel
+from app.repository.concept_description_repository import base_64_url_encode, base_64_url_decode
 
 
 def get_testdata_rdf(element: str, type="minimal"):
@@ -29,6 +30,15 @@ def get_testdata_json(element: str, type="minimal"):
     ) as f:
         content = f.read()
     return content
+
+
+def test_base64_url():
+    value = 'test'
+    assert value == base_64_url_decode(base_64_url_encode(value))
+    value = "Ä"
+    assert value == base_64_url_decode(base_64_url_encode(value))
+    value = ""
+    assert value == base_64_url_decode(base_64_url_encode(value))
 
 
 def test_minimal_concept_description():

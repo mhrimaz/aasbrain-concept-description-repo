@@ -91,5 +91,19 @@ def test_concept_description_to_rdf():
     payload = ConceptDescription(**payload_json)
     graph, created_node = payload.to_rdf()
     re_created = ConceptDescription.from_rdf(graph, created_node)
-    g2 = Graph().parse(data=graph.serialize())
     assert re_created == payload
+
+
+def test_submodel_minimal_to_json():
+    payload_json = json.loads(get_testdata_json("ConceptDescription", "minimal"))["conceptDescriptions"][0]
+    payload = ConceptDescription(**payload_json)
+    dump = payload.model_dump_json(exclude_none=True)
+    assert json.loads(dump) == payload_json
+
+
+def test_submodel_maximal_to_json():
+    payload_json = json.loads(get_testdata_json("ConceptDescription", "maximal"))["conceptDescriptions"][0]
+    payload = ConceptDescription(**payload_json)
+    print(payload)
+    dump = payload.model_dump_json(exclude_none=True)
+    assert json.loads(dump) == payload_json
