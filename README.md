@@ -8,15 +8,44 @@ AAS Brain features solutions and tries to overcome existing limitations and prop
 
 **AAS is great, but let's make it even better**
 
-- You need to create a lot of Concept Descriptions at the same time? Use the Bulk API
+- You need to create a lot of Concept Descriptions at the same time or get multiple Concept Descriptions in one call? Use the Bulk API
 
-- Do you need to get multiple Concept Descriptions in one call? Use the Bulk API
+- REST API interaction doesn't fit for your client side that only needs the unit symbol? Simply avoid overfetching and underfetching by using our GraphQL endpoint. 
 
-- REST API interaction doesn't fit for your client side that only needs the unit symbol? Simply avoid overfetching and underfetching by using GraphQL. Use GraphQL endpoint.
-
-- What is the relationship between concepts? Can I have a cluster view? Can I use my industrial Ontology? Our semantic backend is just for that, contact us!
+- What is the relationship between concepts? Can I have a clustered view? Can I use my industrial Ontology? Our semantic backend is just for that, contact us!
 
 - I don't need an API, I need a user interface. Do you have something like that? We have, contact us!
+
+
+
+## Usage
+
+**NOTE: Docker commands and documentations will be provided.**
+
+```bash
+# pull the latest image 
+docker pull mhrimaz/aas-brain-concept-description-repo
+```
+
+```bash
+# pull the latest image 
+docker run mhrimaz/aas-brain-concept-description-repo
+```
+
+### RestAPI and beyond
+
+Swagger UI documentation is available on `/docs` endpoint. All inputs are validated, so you will be sure everything getting in is valid! Moreover, we have non-normative APIs for bulk requests, better search, and history change tracking. You can disable these extra features if you want.
+
+![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/b05bedd8-6b3a-4e08-a36c-d9fa9679834d)
+
+
+### GraphQL
+
+Don't mix GraphQL with GQL (Graph Query Language). GraphQL is not a query language like SPARQL, Cypher, SQL, .. it is rather a query language for the shape of data. By defining a GraphQL schema, client can ask for what they need. Do you need to show only the unit to the user? Then you don't need other fields, you can simply request for that specific part. GraphQL exactly created to solve this problem. GraphiQL interface for interactive queries is accessible at `/graphql` endpoint.
+
+![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/3d8d48d6-547b-4be1-b518-6a537c4f6b16)
+
+### Backends
 
 **Which backend is the best?**
 
@@ -33,9 +62,10 @@ In this type of workload Redis is the fastest. Unlike other in-memory alternativ
 
 - Hybrid: Thanks to our Redis-based in-memory solution, in future, you can leverage Redis as a caching layer for frequently accessed resources. This is a future plan.
 
-## Usage
+### Built-in UI
 
-Docker commands and documentations will be provided.
+With the built-in user interface, you can see all concepts, search for them, edit them, and create or delete them. This is not a priority for now, but we will implement it.
+
 
 ## Licence
 
