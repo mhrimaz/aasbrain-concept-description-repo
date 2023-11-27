@@ -17,8 +17,8 @@ from ariadne.asgi import GraphQL
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
-from api.graphql import concept_description_repository_graphql
-from api.rest import concept_description_repository_rest
+from app.api.graphql import concept_description_repository_graphql
+from app.api.rest import concept_description_repository_rest
 from app.api.rest import concept_description_repository_extra_rest
 from app.config import get_config
 from app.models.response import HealthResponse, Result, MessageType
