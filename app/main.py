@@ -1,5 +1,27 @@
+#  MIT License
+#
+#  Copyright (c) 2023. Mohammad Hossein Rimaz
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy of
+#  this software and associated documentation files (the “Software”), to deal in
+#  the Software without restriction, including without limitation the rights to use,
+#  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+#  Software, and to permit persons to whom the Software is furnished to do so, subject
+#   to the following conditions:
+#
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
+#
+#  THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+#  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+#  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+#  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 import json
 import logging
+import os
 from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
@@ -17,11 +39,14 @@ from ariadne.asgi import GraphQL
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
+from loguru import logger
+
 from app.api.graphql import concept_description_repository_graphql
 from app.api.rest import concept_description_repository_rest
 from app.api.rest import concept_description_repository_extra_rest
 from app.config import get_config
-from app.models.response import HealthResponse, Result, MessageType
+from app.models.concept_description import ConceptDescription
+from app.models.response import HealthResponse, Result, MessageType, APIException
 from app.repository import get_repository
 from fastapi.encoders import jsonable_encoder
 
@@ -30,9 +55,18 @@ from fastapi.encoders import jsonable_encoder
 async def lifespan(app: FastAPI):
     # Startup
     config = get_config()
-    # logger.info(f"Startup with Config: {config}")
+    logger.info(f"Startup with Config: {config}")
     repo = await get_repository()
     await repo.connect_to_database({"DB_URI": config.db_uri})
+    script_dir = os.path.dirname(__file__)
+    with open(os.path.join(script_dir, "repository", "mock_concepts.json")) as mock:
+        cds = json.load(mock)
+        cd_repo = await get_repository()
+        for cd in cds:
+            try:
+                await cd_repo.add_concept_description(ConceptDescription(**cd))
+            except:
+                pass
 
     yield
     # Shutdown
@@ -147,19 +181,32 @@ async def validation_exception_handler(request, exc):
 
 @app.exception_handler(Exception)
 async def exception_handler(request, exc):
-    # TODO: change code and messageType based on exception
-    result = Result(
-        **{
-            "messages": [
-                {
-                    "code": "500",
-                    "messageType": "Error",
-                    "text": str(exc),
-                    "timestamp": str(datetime.now(timezone.utc).isoformat()),
-                }
-            ]
-        }
-    )
+    if isinstance(exc, APIException):
+        result = Result(
+            **{
+                "messages": [
+                    {
+                        "code": str(exc.error_code),
+                        "messageType": "Error",
+                        "text": str(exc.message),
+                        "timestamp": str(datetime.now(timezone.utc).isoformat()),
+                    }
+                ]
+            }
+        )
+    else:
+        result = Result(
+            **{
+                "messages": [
+                    {
+                        "code": "500",
+                        "messageType": "Error",
+                        "text": str(exc),
+                        "timestamp": str(datetime.now(timezone.utc).isoformat()),
+                    }
+                ]
+            }
+        )
     return JSONResponse(json.loads(result.model_dump_json()), status_code=500)
 
 

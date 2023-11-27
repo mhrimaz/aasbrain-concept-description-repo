@@ -1,5 +1,9 @@
 [
   {
+    "id": "MyConcept",
+    "modelType": "ConceptDescription"
+  },
+  {
     "description": [
       {
         "language": "en",

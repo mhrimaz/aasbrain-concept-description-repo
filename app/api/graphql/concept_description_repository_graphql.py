@@ -8,6 +8,7 @@ from app.models.concept_description import ConceptDescription
 from app.models.key import Key, KeyTypes
 import os
 
+from app.models.response import APIException
 from app.repository import get_repository
 from app.repository.concept_description_repository import base_64_url_encode
 
@@ -268,25 +269,17 @@ type_defs = """
 
 query = QueryType()
 
-concept_descriptions = []
-
-script_dir = os.path.dirname(__file__)
-with open(os.path.join(script_dir, "mock_concepts.json")) as mock:
-    cds = json.load(mock)
-    for cd in cds:
-        concept_descriptions.append(ConceptDescription(**cd))
-print(concept_descriptions)
-
 
 @query.field("conceptDescriptions")
-def resolve_concept_descriptions(
+async def resolve_concept_descriptions(
     _, info, idShort=None, isCaseOf=None, dataSpecificationRef=None, cursor=None, limit=100
 ):
-    cd_list = []
-    for cd in concept_descriptions:
-        cd_dump = json.loads(cd.model_dump_json(exclude_none=True))
-        cd_list.append(cd_dump)
-    return {"nodes": cd_list, "cursor": "NotImplemented"}
+    cd_repository = await get_repository()
+    try:
+        result = await cd_repository.get_concept_descriptions(query={}, cursor=cursor, limit=limit)
+        return {"nodes": result.result, "cursor": result.paging_metadata.cursor}
+    except APIException:
+        return None
 
 
 @query.field("conceptDescription")
@@ -294,12 +287,10 @@ async def resolve_concept_description(_, info, id):
     # TODO: this should be efficient
     cd_repository = await get_repository()
     base64_id = base_64_url_encode(id)
-    print(await cd_repository.get_concept_description(base64_id))
-    cd_list = []
-    for cd in concept_descriptions:
-        cd_dump = json.loads(cd.model_dump_json(exclude_none=True))
-        cd_list.append(cd_dump)
-    return cd_list[0]
+    try:
+        return await cd_repository.get_concept_description(base64_id)
+    except APIException:
+        return None
 
 
 # Create executable schema instance
