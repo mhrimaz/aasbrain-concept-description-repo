@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  fastapi:
+    image: mhrimaz/aas-brain-concept-description-repo
+    restart: unless-stopped
+    environment:
+      - DB_URI=redis://redis:6379
+    depends_on:
+      - redis
+    ports:
+      - "9192:80"
+    expose:
+      - 9192
+    networks:
+      - cd-repo-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.rule=Host(`cd.myaas.ai`)"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
+  traefik:
+    image: traefik:v2.10
+    restart: unless-stopped
+    depends_on:
+      fastapi:
+        condition: service_healthy
+    command:
+      - "--api.insecure=false"
+      - "--log.level=DEBUG"
+      - "--api.dashboard=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=mhrimaz@yahoo.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    networks:
+      - cd-repo-network
+    ports:
+     - "80:80"
+     - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+  redis:
+    container_name:  redis
+    image: redis:7.0-alpine
+    restart: unless-stopped
+    networks:
+      - cd-repo-network
+    ports:
+      - "6019:6379"
+
+networks:
+  cd-repo-network:
+    external: true
