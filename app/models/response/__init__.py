@@ -78,39 +78,33 @@ class DatabaseConnectionException(Exception):
     """Unable to reach database"""
 
     error_code = 500
-    pass
 
 
 class ConceptNotFoundException(Exception):
     """The concept description does not exists."""
 
     error_code = 404
-    pass
 
 
 class DuplicateConceptException(Exception):
     """The concept description already exists."""
 
     error_code = 400
-    pass
 
 
 class UpdatePayloadIDMismatchException(Exception):
     """The provided base64-url-encoded-id does not match with the provided id in the payload."""
 
     error_code = 400
-    pass
 
 
 class InvalidPayloadException(Exception):
     """The provided payload does not comply with AAS specification."""
 
     error_code = 400
-    pass
 
 
 class OperationNotAllowedException(Exception):
     """This operation is not allowed."""
 
     error_code = 403
-    pass
