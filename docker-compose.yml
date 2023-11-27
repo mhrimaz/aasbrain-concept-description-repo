@@ -16,7 +16,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.rule=Host(`cd.myaas.ai`)"
+      - "traefik.http.routers.app.rule=Host(`cd.yourdomian.com`)"
       - "traefik.http.routers.app.tls.certresolver=myresolver"
   traefik:
     image: traefik:v2.10
@@ -33,7 +33,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=mhrimaz@yahoo.com"
+      - "--certificatesresolvers.myresolver.acme.email=email@example.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     networks:
       - cd-repo-network
