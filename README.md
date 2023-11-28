@@ -47,6 +47,18 @@ Don't mix GraphQL with GQL (Graph Query Language). GraphQL is not a query langua
 
 ### Backends
 
+```mermaid
+flowchart LR
+  Application --> GraphQL[GraphQL]
+  Application --> REST[REST API]
+  GraphQL --> Repo[Concept Description Repository]
+  REST --> Repo[Concept Description Repository]
+  Repo --> DB1[Redis]
+  Repo --> DB2[GraphDB]
+  Repo --> DB3[Neo4j]
+  Repo --> DB4[MongoDB]
+  Repo --> DB5[MongoDB]
+```
 **Which backend is the best?**
 
 Which backend is the best? The answer is obvious! It depends :)
