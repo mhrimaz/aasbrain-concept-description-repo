@@ -23,13 +23,13 @@ AAS Brain features solutions and tries to overcome existing limitations and prop
 **NOTE: Docker commands and documentations will be provided.**
 
 ```bash
-# pull the latest image 
 docker pull mhrimaz/aas-brain-concept-description-repo
 ```
 
+Simple deployment:
 ```bash
-# pull the latest image 
-docker run mhrimaz/aas-brain-concept-description-repo
+docker run --name=cd-redis -p6767:6379 redis:7.0-alpine
+docker run -e DB_URI="redis://cd-redis:6379" --link=cd-redis -p9393:80 mhrimaz/aas-brain-concept-description-repo
 ```
 
 ### RestAPI and beyond
