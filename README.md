@@ -20,16 +20,25 @@ AAS Brain features solutions and tries to overcome existing limitations and prop
 
 ## Usage
 
-**NOTE: Docker commands and documentations will be provided.**
+**You can find a running demo instance on [here](https://cd.myaas.ai)**
+
+Pull the image:
 
 ```bash
 docker pull mhrimaz/aas-brain-concept-description-repo
 ```
 
-Simple deployment:
+Option 1: Simple deployment:
 ```bash
 docker run --name=cd-redis -p6767:6379 redis:7.0-alpine
 docker run -e DB_URI="redis://cd-redis:6379" --link=cd-redis -p9393:80 mhrimaz/aas-brain-concept-description-repo
+```
+
+Option 2: Running on your domain behind traefik with auto ssl certificates:
+Change in the [docker-compose.yml](docker-compose.yml) your domain and email for certificate.
+```bash
+docker network create cd-repo-network
+docker compose up --build -d
 ```
 
 ### RestAPI and beyond
@@ -82,6 +91,8 @@ In this type of workload Redis is the fastest. Unlike other in-memory alternativ
 - GraphQL optimized with search capability: Thanks to the AAS-Connect master schema, and Neo4j GraphQL library, a graphql endpoint is at its most optimum way. Moreover, Neo4j automatically generates query parameters so you have much more flexibility here. So if you want to have GraphQL consider to use Neo4j backend.
 
 - Hybrid: Thanks to our Redis-based in-memory solution, in future, you can leverage Redis as a caching layer for frequently accessed resources. This is a future plan.
+
+Currently only Redis backend available.
 
 ### Built-in UI
 
