@@ -45,6 +45,15 @@ Don't mix GraphQL with GQL (Graph Query Language). GraphQL is not a query langua
 
 ![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/3d8d48d6-547b-4be1-b518-6a537c4f6b16)
 
+If you want to show the value of a property and its unit, you need to get the whole concept description, for the example here the complete response size is 1000B.
+![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/9f1629ec-5029-411a-93e4-fe07baec7c64)
+
+But with GraphQL you can ask only what you need, and you will get only what you requested for. The response size is now only 239B. Small difference for sure, but if you want to fetch milions of concepts in such a way, the difference will add up!
+
+![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/15d0ba15-daea-4a7d-a99e-5659a2622bf2)
+
+
+
 ### Backends
 
 ```mermaid
@@ -57,7 +66,7 @@ flowchart LR
   Repo --> DB2[GraphDB]
   Repo --> DB3[Neo4j]
   Repo --> DB4[MongoDB]
-  Repo --> DB5[MongoDB]
+  Repo --> DB5[Hybrid]
 ```
 **Which backend is the best?**
 
