@@ -256,6 +256,7 @@ type_defs = """
         modelType: ModelType!
     }
     
+
     type ConceptDescriptionsResult{
         nodes: [ConceptDescription!]
         cursor: String!
@@ -288,7 +289,8 @@ async def resolve_concept_description(_, info, id):
     cd_repository = await get_repository()
     base64_id = base_64_url_encode(id)
     try:
-        return await cd_repository.get_concept_description(base64_id)
+        concept = await cd_repository.get_concept_description(base64_id)
+        return json.loads(concept.model_dump_json(exclude_none=True))
     except APIException:
         return None
 
