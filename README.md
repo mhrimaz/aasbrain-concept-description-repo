@@ -20,7 +20,7 @@ AAS Brain features solutions and tries to overcome existing limitations and prop
 
 ## Usage
 
-**You can find a running demo instance on [here](https://cd.myaas.ai)**
+**You can find a running demo instance on [here](https://cd.myaas.ai) - [REST API](https://cd.myaas.ai/docs), [GraphQL](https://cd.myaas.ai/graphql)**
 
 Pull the image:
 
