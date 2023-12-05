@@ -24,6 +24,7 @@ from rdflib import RDF
 
 from app.models.aas_namespace import AASNameSpace
 from app.models.annotated_relationship_element import AnnotatedRelationshipElement
+from app.models.file import File
 from app.models.multi_language_property import MultiLanguageProperty
 from app.models.property import Property
 from app.models.submodel_element import SubmodelElement
@@ -45,7 +46,7 @@ def from_unknown_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> Sub
     if type_ref == AASNameSpace.AAS["Blob"]:
         raise NotImplementedError()
     if type_ref == AASNameSpace.AAS["File"]:
-        raise NotImplementedError()
+        return File.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["MultiLanguageProperty"]:
         return MultiLanguageProperty.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["Property"]:
