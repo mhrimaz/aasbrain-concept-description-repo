@@ -20,16 +20,25 @@ AAS Brain features solutions and tries to overcome existing limitations and prop
 
 ## Usage
 
-**NOTE: Docker commands and documentations will be provided.**
+**You can find a running demo instance on [here](https://cd.myaas.ai) - [REST API](https://cd.myaas.ai/docs), [GraphQL](https://cd.myaas.ai/graphql)**
+
+Pull the image:
 
 ```bash
 docker pull mhrimaz/aas-brain-concept-description-repo
 ```
 
-Simple deployment:
+Option 1: Simple deployment:
 ```bash
 docker run --name=cd-redis -p6767:6379 redis:7.0-alpine
 docker run -e DB_URI="redis://cd-redis:6379" --link=cd-redis -p9393:80 mhrimaz/aas-brain-concept-description-repo
+```
+
+Option 2: Running on your domain behind traefik with auto ssl certificates:
+Change in the [docker-compose.yml](docker-compose.yml) your domain and email for certificate.
+```bash
+docker network create cd-repo-network
+docker compose up --build -d
 ```
 
 ### RestAPI and beyond
@@ -45,6 +54,15 @@ Don't mix GraphQL with GQL (Graph Query Language). GraphQL is not a query langua
 
 ![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/3d8d48d6-547b-4be1-b518-6a537c4f6b16)
 
+If you want to show the value of a property and its unit, you need to get the whole concept description, for the example here the complete response size is 1000B.
+![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/9f1629ec-5029-411a-93e4-fe07baec7c64)
+
+But with GraphQL you can ask only what you need, and you will get only what you requested for. The response size is now only 239B. Small difference for sure, but if you want to fetch milions of concepts in such a way, the difference will add up!
+
+![image](https://github.com/mhrimaz/aasbrain-concept-description-repo/assets/17963017/15d0ba15-daea-4a7d-a99e-5659a2622bf2)
+
+
+
 ### Backends
 
 ```mermaid
@@ -57,7 +75,7 @@ flowchart LR
   Repo --> DB2[GraphDB]
   Repo --> DB3[Neo4j]
   Repo --> DB4[MongoDB]
-  Repo --> DB5[MongoDB]
+  Repo --> DB5[Hybrid]
 ```
 **Which backend is the best?**
 
@@ -73,6 +91,8 @@ In this type of workload Redis is the fastest. Unlike other in-memory alternativ
 - GraphQL optimized with search capability: Thanks to the AAS-Connect master schema, and Neo4j GraphQL library, a graphql endpoint is at its most optimum way. Moreover, Neo4j automatically generates query parameters so you have much more flexibility here. So if you want to have GraphQL consider to use Neo4j backend.
 
 - Hybrid: Thanks to our Redis-based in-memory solution, in future, you can leverage Redis as a caching layer for frequently accessed resources. This is a future plan.
+
+Currently only Redis backend available.
 
 ### Built-in UI
 
