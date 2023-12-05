@@ -361,7 +361,7 @@ def test_any_submodel_element_minimal_to_rdf():
         "MultiLanguageProperty",
         "SubmodelElementCollection",
         "AnnotatedRelationshipElement",
-        # "File",
+        "File",
         # "Capability",
         # "SubmodelElementList",
         # "Range",
