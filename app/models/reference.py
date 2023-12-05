@@ -33,6 +33,7 @@ from app.models.reference_types import ReferenceTypes
 
 class Reference(BaseModel, RDFiable):
     type: ReferenceTypes
+    # At least one key should be there
     keys: List[Key] = Field(..., min_length=1)
     # this is not a mistake, since it is a recursive structure, we need to define it in this way.
     referredSemanticId: "Reference" = None

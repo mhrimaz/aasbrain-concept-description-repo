@@ -33,4 +33,4 @@ from app.models.reference import Reference
 
 class ReferenceElement(DataElement):
     value: Optional[Reference] = None
-    modelType: ModelType = ModelType.ReferenceElement
+    modelType: Literal["ReferenceElement"] = ModelType.ReferenceElement.value

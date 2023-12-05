@@ -31,4 +31,4 @@ from app.models.model_type import ModelType
 class File(DataElement):
     value: Optional[str] = None
     contentType: str
-    modelType: ModelType = ModelType.File
+    modelType: Literal["File"] = ModelType.File.value

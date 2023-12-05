@@ -62,12 +62,33 @@ class AdministrativeInformation(HasDataSpecification):
         hasDataSpecification = HasDataSpecification.from_rdf(graph, subject)
 
         version_value = None
-
+        version_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["AdministrativeInformation/version"]),
+            None,
+        )
+        if version_ref:
+            version_value = version_ref.value
         revision_value = None
-
+        revision_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["AdministrativeInformation/revision"]),
+            None,
+        )
+        if revision_ref:
+            revision_value = revision_ref.value
         creator_value = None
-
+        creator_ref: rdflib.URIRef = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["AdministrativeInformation/creator"]),
+            None,
+        )
+        if creator_ref:
+            creator_value = Reference.from_rdf(graph, creator_ref)
         template_id_value = None
+        template_id_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["AdministrativeInformation/templateId"]),
+            None,
+        )
+        if template_id_ref:
+            template_id_value = template_id_ref.value
         return AdministrativeInformation(
             version=version_value,
             revision=revision_value,

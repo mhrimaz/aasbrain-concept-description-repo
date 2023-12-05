@@ -37,8 +37,8 @@ from app.models.reference import Reference
 
 
 class ConceptDescription(Identifiable, HasDataSpecification, RDFiable):
-    isCaseOf: Optional[List[Reference]] = Field(None, min_length=1)
-    modelType: ModelType = ModelType.ConceptDescription
+    isCaseOf: Optional[List[Reference]] = Field(None, min_length=0)
+    modelType: Literal["ConceptDescription"] = ModelType.ConceptDescription.value
 
     def to_rdf(
         self,

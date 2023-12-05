@@ -18,21 +18,24 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+from app.models.model_type import ModelType
+from app.models.specific_asset_id import SpecificAssetId
+from app.models.submodel_element import SubmodelElement
 
 from enum import Enum
 from typing import Any, List, Optional, Union, Literal
 
+import pydantic
 from pydantic import BaseModel, Field, constr
 
-from app.models.data_element import DataElement
-from app.models.data_type_def_xsd import DataTypeDefXsd
-from app.models.lang_string_text_type import LangStringTextType
-from app.models.model_type import ModelType
-from app.models.reference import Reference
+
+# TODO: recheck
+class OperationVariable(BaseModel):
+    value: "SubmodelElementChoice"
 
 
-class Range(DataElement):
-    valueType: DataTypeDefXsd
-    min: Optional[str] = None
-    max: Optional[str] = None
-    modelType: Literal["Range"] = ModelType.Range.value
+class Operation(SubmodelElement):
+    inputVariables: Optional[List[OperationVariable]] = Field(None, min_length=1)
+    outputVariables: Optional[List[OperationVariable]] = Field(None, min_length=1)
+    inoutputVariables: Optional[List[OperationVariable]] = Field(None, min_length=1)
+    modelType: Literal["Operation"] = ModelType.Operation.value

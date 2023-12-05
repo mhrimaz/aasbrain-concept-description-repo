@@ -30,3 +30,5 @@ HoRi 2023.11.23 - Add semantic triplestore backend. Jena was the first condidate
 HoRi 2023.11.23 - Bulk endpoints? path? should it be atomic? here they provide non atomic https://developer.adobe.com/commerce/webapi/rest/use-rest/bulk-endpoints/, here they discourage non atomic https://adidas.gitbook.io/api-guidelines/rest-api-guidelines/execution/batch-operations it is just about preference.
 it can be /concept-descriptions/bulkOperations like https://docs.oracle.com/en/cloud/paas/content-cloud/rest-api-manage-content/api-items-bulk-operations.html , https://www.ibm.com/docs/en/bpm/8.5.6?topic=resources-process-instance-bulk-operations
 or it can be /bulk/concept-descriptions like https://mailchimp.com/developer/marketing/guides/run-async-requests-batch-endpoint/
+
+HoRi 2023.12.04 - Why modelType: Literal['Property'] = ModelType.Property.value? because only Literal can be discriminator not Enum.

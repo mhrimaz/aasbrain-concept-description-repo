@@ -18,3 +18,11 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+from typing import Literal
+
+from app.models.model_type import ModelType
+from app.models.relationship_element_abstract import RelationshipElementAbstract
+
+
+class RelationshipElement(RelationshipElementAbstract):
+    modelType: Literal["RelationshipElement"] = ModelType.RelationshipElement.value

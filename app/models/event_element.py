@@ -18,21 +18,8 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-from enum import Enum
-from typing import Any, List, Optional, Union, Literal
-
-from pydantic import BaseModel, Field, constr
-
-from app.models.data_element import DataElement
-from app.models.data_type_def_xsd import DataTypeDefXsd
-from app.models.lang_string_text_type import LangStringTextType
-from app.models.model_type import ModelType
-from app.models.reference import Reference
+from app.models.submodel_element import SubmodelElement
 
 
-class Range(DataElement):
-    valueType: DataTypeDefXsd
-    min: Optional[str] = None
-    max: Optional[str] = None
-    modelType: Literal["Range"] = ModelType.Range.value
+class EventElement(SubmodelElement):
+    pass

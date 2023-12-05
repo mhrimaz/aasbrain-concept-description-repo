@@ -31,7 +31,7 @@ from app.models.extension import Extension
 
 
 class HasExtensions(BaseModel):
-    extensions: Optional[List[Extension]] = Field(None, min_length=1)
+    extensions: Optional[List[Extension]] = Field(None, min_length=0)
 
     # TODO: instead of list Set might be better see Constraint AASd-077
 

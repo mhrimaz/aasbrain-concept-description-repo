@@ -18,21 +18,31 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+from app.models.model_type import ModelType
+from app.models.specific_asset_id import SpecificAssetId
+from app.models.submodel_element import SubmodelElement
 
 from enum import Enum
 from typing import Any, List, Optional, Union, Literal
 
+import pydantic
 from pydantic import BaseModel, Field, constr
 
-from app.models.data_element import DataElement
-from app.models.data_type_def_xsd import DataTypeDefXsd
-from app.models.lang_string_text_type import LangStringTextType
-from app.models.model_type import ModelType
-from app.models.reference import Reference
+
+class EntityType(Enum):
+    CoManagedEntity = "CoManagedEntity"
+    SelfManagedEntity = "SelfManagedEntity"
 
 
-class Range(DataElement):
-    valueType: DataTypeDefXsd
-    min: Optional[str] = None
-    max: Optional[str] = None
-    modelType: Literal["Range"] = ModelType.Range.value
+class Entity(SubmodelElement):
+    # TODO: recheck
+    statements: List["SubmodelElementChoice"] = Field(None, min_length=0, discriminator="modelType")
+    entityType: EntityType
+    globalAssetId: Optional[
+        constr(
+            min_length=1,
+            max_length=2000,
+        )
+    ] = None
+    specificAssetIds: Optional[List[SpecificAssetId]] = Field(None, min_length=1)
+    modelType: Literal["Entity"] = ModelType.Entity.value

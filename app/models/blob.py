@@ -35,4 +35,4 @@ from app.models.reference import Reference
 class Blob(DataElement):
     value: Optional[str] = None
     contentType: str
-    modelType: ModelType.Blob
+    modelType: Literal["Blob"] = ModelType.Blob.value

@@ -20,33 +20,42 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from enum import Enum
-from typing import Any, List, Optional, Union, Literal
+from typing import Any, List, Optional, Union, Literal, Annotated
 
 import pydantic
 from pydantic import BaseModel, Field, constr
 
+from app.models.annotated_relationship_element import AnnotatedRelationshipElement
+from app.models.basic_event_element import BasicEventElement
 from app.models.blob import Blob
+from app.models.capability import Capability
+from app.models.entity import Entity
 from app.models.file import File
 from app.models.multi_language_property import MultiLanguageProperty
+from app.models.operation import Operation
 from app.models.property import Property
 from app.models.range import Range
 from app.models.reference_element import ReferenceElement
+from app.models.relationship_element import RelationshipElement
+from app.models.submodel_element_collection import SubmodelElementCollection
+from app.models.submodel_element_list import SubmodelElementList
 
-
-class SubmodelElementChoice(BaseModel):
-    __root__: Union[
-        # RelationshipElement,
-        # AnnotatedRelationshipElement,
-        # BasicEventElement,
+SubmodelElementChoice = Annotated[
+    Union[
+        RelationshipElement,
+        AnnotatedRelationshipElement,
+        BasicEventElement,
         Blob,
-        # Capability,
-        # Entity,
         File,
         MultiLanguageProperty,
-        # Operation,
         Property,
         Range,
         ReferenceElement,
-        # SubmodelElementCollection,
-        # SubmodelElementList,
-    ]
+        SubmodelElementCollection,
+        SubmodelElementList,
+        Entity,
+        Capability,
+        Operation,
+    ],
+    Field(discriminator="modelType"),
+]

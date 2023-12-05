@@ -32,7 +32,7 @@ from app.models.reference import Reference
 
 class HasSemantics(BaseModel):
     semanticId: Optional[Reference] = None
-    supplementalSemanticIds: Optional[List[Reference]] = Field(None, min_length=1)
+    supplementalSemanticIds: Optional[List[Reference]] = Field(None, min_length=0)
 
     @staticmethod
     def append_as_rdf(instance: "HasSemantics", graph: rdflib.Graph, parent_node: rdflib.IdentifiedNode):

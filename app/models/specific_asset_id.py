@@ -22,13 +22,17 @@
 from enum import Enum
 from typing import Any, List, Optional, Union, Literal
 
+import rdflib
 from pydantic import BaseModel, Field, constr
+from rdflib import RDF
 
+from app.models.aas_namespace import AASNameSpace
 from app.models.has_semantics import HasSemantics
+from app.models.rdfiable import RDFiable
 from app.models.reference import Reference
 
 
-class SpecificAssetId(HasSemantics):
+class SpecificAssetId(HasSemantics, RDFiable):
     name: constr(
         min_length=1,
         max_length=64,
@@ -38,3 +42,62 @@ class SpecificAssetId(HasSemantics):
         max_length=2000,
     )
     externalSubjectId: Optional[Reference] = None
+
+    def to_rdf(
+        self,
+        graph: rdflib.Graph = None,
+        parent_node: rdflib.IdentifiedNode = None,
+        prefix_uri: str = "",
+        base_uri: str = "",
+    ) -> (rdflib.Graph, rdflib.IdentifiedNode):
+        if graph == None:
+            graph = rdflib.Graph()
+            graph.bind("aas", AASNameSpace.AAS)
+
+        node = rdflib.BNode()
+        graph.add((node, RDF.type, AASNameSpace.AAS["SpecificAssetId"]))
+
+        # HasSemantics
+        HasSemantics.append_as_rdf(self, graph, node)
+
+        graph.add((node, AASNameSpace.AAS["SpecificAssetId/name"], rdflib.Literal(self.name)))
+        graph.add((node, AASNameSpace.AAS["SpecificAssetId/value"], rdflib.Literal(self.value)))
+        if self.externalSubjectId:
+            _, created_node = self.externalSubjectId.to_rdf(graph, node)
+            graph.add((node, AASNameSpace.AAS["SpecificAssetId/externalSubjectId"], created_node))
+
+        return graph, node
+
+    @staticmethod
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode):
+        name_value = None
+
+        name_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["SpecificAssetId/name"]), None
+        )
+        if name_ref:
+            name_value = name_ref.value
+
+        value_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["SpecificAssetId/value"]), None
+        )
+        value_value = None
+        if value_ref:
+            value_value = value_ref.value
+
+        external_subject_id_value = None
+        external_subject_id_ref: rdflib.URIRef = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["SpecificAssetId/externalSubjectId"]), None
+        )
+        if external_subject_id_ref:
+            external_subject_id_value = Reference.from_rdf(graph, external_subject_id_ref)
+
+        # HasSemantics
+        hasSemantics = HasSemantics.from_rdf(graph, subject)
+        return SpecificAssetId(
+            name=name_value,
+            value=value_value,
+            externalSubjectId=external_subject_id_value,
+            semanticId=hasSemantics.semanticId,
+            supplementalSemanticIds=hasSemantics.supplementalSemanticIds,
+        )

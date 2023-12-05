@@ -29,4 +29,4 @@ from app.models.qualifier import Qualifier
 
 
 class Qualifiable(BaseModel):
-    qualifiers: Optional[List[Qualifier]] = Field(None, min_length=1)
+    qualifiers: Optional[List[Qualifier]] = Field(None, min_length=0)
