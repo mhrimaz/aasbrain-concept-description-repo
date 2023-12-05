@@ -73,7 +73,7 @@
                 <https://admin-shell.io/aas/3/0/DataSpecificationIec61360/value> "something_4e9c19b7"^^xs:string ;
             ] ;
         ] ;
-        <https://admin-shell.io/aas/3/0/Blob/value> "FYFZv/O3Z+zHt1M="^^xs:base64Binary ;
+        <https://admin-shell.io/aas/3/0/Blob/value> "dGVzdA=="^^xs:base64Binary ;
         <https://admin-shell.io/aas/3/0/Blob/contentType> "'VbrwFrYTU/fO7NnLxq   	; 	MX.`10dB732`X5yRy=I56Ov9Us	 ;		 pRb~~hdw_C%2Zf=\"\"			    			 	 		 	  ; h=1t"^^xs:string ;
     ] ;
 .
