@@ -24,6 +24,8 @@ from rdflib import RDF
 
 from app.models.aas_namespace import AASNameSpace
 from app.models.annotated_relationship_element import AnnotatedRelationshipElement
+from app.models.blob import Blob
+from app.models.capability import Capability
 from app.models.file import File
 from app.models.multi_language_property import MultiLanguageProperty
 from app.models.property import Property
@@ -44,7 +46,7 @@ def from_unknown_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> Sub
     if type_ref == AASNameSpace.AAS["BasicEventElement"]:
         raise NotImplementedError()
     if type_ref == AASNameSpace.AAS["Blob"]:
-        raise NotImplementedError()
+        return Blob.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["File"]:
         return File.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["MultiLanguageProperty"]:
@@ -62,6 +64,6 @@ def from_unknown_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> Sub
     if type_ref == AASNameSpace.AAS["Entity"]:
         raise NotImplementedError()
     if type_ref == AASNameSpace.AAS["Capability"]:
-        raise NotImplementedError()
+        return Capability.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["Operation"]:
         raise NotImplementedError()

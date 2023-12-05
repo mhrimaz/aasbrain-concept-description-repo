@@ -22,13 +22,18 @@
 from enum import Enum
 from typing import Any, List, Optional, Union, Literal
 
+import rdflib
 from pydantic import BaseModel, Field, constr
+from rdflib import RDF
 
+from app.models.aas_namespace import AASNameSpace
 from app.models.data_element import DataElement
 from app.models.data_type_def_xsd import DataTypeDefXsd
 from app.models.lang_string_text_type import LangStringTextType
 from app.models.model_type import ModelType
 from app.models.reference import Reference
+from app.models.submodel_element import SubmodelElement
+import base64
 
 
 # TODO: check content type
@@ -36,3 +41,60 @@ class Blob(DataElement):
     value: Optional[str] = None
     contentType: str
     modelType: Literal["Blob"] = ModelType.Blob.value
+
+    def to_rdf(
+        self,
+        graph: rdflib.Graph = None,
+        parent_node: rdflib.IdentifiedNode = None,
+        prefix_uri: str = "",
+        base_uri: str = "",
+    ) -> (rdflib.Graph, rdflib.IdentifiedNode):
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph.add((created_node, RDF.type, AASNameSpace.AAS["Blob"]))
+        if self.value != None:
+            created_graph.add(
+                (
+                    created_node,
+                    AASNameSpace.AAS["Blob/value"],
+                    rdflib.Literal(self.value, datatype=rdflib.XSD.base64Binary),
+                )
+            )
+        created_graph.add(
+            (
+                created_node,
+                AASNameSpace.AAS["Blob/contentType"],
+                rdflib.Literal(self.contentType),
+            )
+        )
+        return created_graph, created_node
+
+    @staticmethod
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "Blob":
+        value_value = None
+        value_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["Blob/value"]),
+            None,
+        )
+        if value_ref:
+            value_value = value_ref
+        content_type_value = None
+        content_type_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["Blob/contentType"]),
+            None,
+        )
+        if content_type_ref:
+            content_type_value = content_type_ref.value
+        submodel_element = SubmodelElement.from_rdf(graph, subject)
+        return Blob(
+            value=value_value,
+            contentType=content_type_value,
+            qualifiers=submodel_element.qualifiers,
+            category=submodel_element.category,
+            idShort=submodel_element.idShort,
+            displayName=submodel_element.displayName,
+            description=submodel_element.description,
+            extensions=submodel_element.extensions,
+            semanticId=submodel_element.semanticId,
+            supplementalSemanticIds=submodel_element.supplementalSemanticIds,
+            embeddedDataSpecifications=submodel_element.embeddedDataSpecifications,
+        )

@@ -20,9 +20,39 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from typing import Literal
 
+import rdflib
+from rdflib import RDF
+
+from app.models.aas_namespace import AASNameSpace
 from app.models.model_type import ModelType
 from app.models.submodel_element import SubmodelElement
 
 
 class Capability(SubmodelElement):
     modelType: Literal["Capability"] = ModelType.Capability.value
+
+    def to_rdf(
+        self,
+        graph: rdflib.Graph = None,
+        parent_node: rdflib.IdentifiedNode = None,
+        prefix_uri: str = "",
+        base_uri: str = "",
+    ) -> (rdflib.Graph, rdflib.IdentifiedNode):
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph.add((created_node, RDF.type, AASNameSpace.AAS["Capability"]))
+        return created_graph, created_node
+
+    @staticmethod
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "Capability":
+        submodel_element = SubmodelElement.from_rdf(graph, subject)
+        return Capability(
+            qualifiers=submodel_element.qualifiers,
+            category=submodel_element.category,
+            idShort=submodel_element.idShort,
+            displayName=submodel_element.displayName,
+            description=submodel_element.description,
+            extensions=submodel_element.extensions,
+            semanticId=submodel_element.semanticId,
+            supplementalSemanticIds=submodel_element.supplementalSemanticIds,
+            embeddedDataSpecifications=submodel_element.embeddedDataSpecifications,
+        )
