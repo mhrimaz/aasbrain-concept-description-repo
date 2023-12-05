@@ -29,6 +29,7 @@ from app.models.capability import Capability
 from app.models.file import File
 from app.models.multi_language_property import MultiLanguageProperty
 from app.models.property import Property
+from app.models.range import Range
 from app.models.submodel_element import SubmodelElement
 from app.models.submodel_element_collection import SubmodelElementCollection
 
@@ -54,7 +55,7 @@ def from_unknown_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> Sub
     if type_ref == AASNameSpace.AAS["Property"]:
         return Property.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["Range"]:
-        raise NotImplementedError()
+        return Range.from_rdf(graph, subject)
     if type_ref == AASNameSpace.AAS["ReferenceElement"]:
         raise NotImplementedError()
     if type_ref == AASNameSpace.AAS["SubmodelElementCollection"]:
