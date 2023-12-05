@@ -365,11 +365,11 @@ def test_any_submodel_element_minimal_to_rdf():
         "Capability",
         "Blob",
         "Range",
-        # "ReferenceElement",
+        "ReferenceElement",
+        # "RelationshipElement",
         # "Operation",
         # "Entity",
         # "BasicEventElement",
-        # "RelationshipElement",
         # "SubmodelElementList",
     ]:
         payload_json = json.loads(get_testdata_json(model, "minimal"))["submodels"][0]
@@ -390,11 +390,12 @@ def test_any_submodel_element_maximal_to_rdf():
         "Capability",
         "Blob",
         "Range",
-        # "ReferenceElement",
+        "ReferenceElement",
+        # "RelationshipElement",
         # "Operation",
         # "Entity",
         # "BasicEventElement",
-        # "RelationshipElement",
+
         # "SubmodelElementList",
     ]:
         payload_json = json.loads(get_testdata_json(model, "maximal"))["submodels"][0]

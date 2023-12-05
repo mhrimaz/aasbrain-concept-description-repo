@@ -35,7 +35,7 @@ from app.models.response import (
 from app.repository import ConceptDescriptionRepository
 from datetime import datetime, timezone
 
-from app.repository.concept_description_repository import (
+from app.models import (
     base_64_url_encode,
     base_64_url_decode,
 )

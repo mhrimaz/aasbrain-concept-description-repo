@@ -28,6 +28,7 @@ import fastapi
 from fastapi.openapi.docs import get_redoc_html
 from rdflib import Graph
 
+from app.models.asset_administraion_shell import AssetAdministrationShell
 from app.models.concept_description import ConceptDescription
 from app.models.response import (
     GetConceptDescriptionsResult,
@@ -36,6 +37,7 @@ from app.models.response import (
     DatabaseConnectionException,
     ConceptNotFoundException,
 )
+from app.models.submodel import Submodel
 from app.repository import ConceptDescriptionRepository, get_repository
 from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
@@ -96,3 +98,35 @@ async def atomic_bulk_update_concept_descriptions(
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
     raise NotImplementedError("Bulk update endpoint not implemented.")
+
+
+@router.post("/submodel:jsontordf", tags=["RDF"])
+async def convert_submodel_to_rdf(
+    submodel=fastapi.Body(..., examples=[{"id": "MySubmodel", "modelType": "Submodel"}]),
+):
+    payload = Submodel(**submodel)
+    graph, _ = payload.to_rdf()
+    return fastapi.Response(content=graph.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
+
+
+@router.post("/concept-description:jsontordf", tags=["RDF"])
+async def convert_concept_description_to_rdf(
+    concept=fastapi.Body(..., examples=[{"id": "MyConcept", "modelType": "ConceptDescription"}]),
+):
+    payload = ConceptDescription(**concept)
+    graph, _ = payload.to_rdf()
+    return fastapi.Response(content=graph.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
+
+
+@router.post("/shell:jsontordf", tags=["RDF"])
+async def convert_shell_to_rdf(
+    shell=fastapi.Body(
+        ...,
+        examples=[
+            {"id": "MyShell", "assetInformation": {"assetKind": "Instance"}, "modelType": "AssetAdministrationShell"}
+        ],
+    ),
+):
+    payload = AssetAdministrationShell(**shell)
+    graph, _ = payload.to_rdf()
+    return fastapi.Response(content=graph.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
