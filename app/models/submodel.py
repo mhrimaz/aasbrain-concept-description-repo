@@ -44,6 +44,7 @@ from app.models.reference import Reference
 from app.models.submodel_element import SubmodelElement
 from app.models.submodel_element_choice import SubmodelElementChoice
 from app.models.util import from_unknown_rdf
+from app.models import base_64_url_encode
 
 
 class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecification, RDFiable):
@@ -65,7 +66,7 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
 
-        node = rdflib.URIRef(f"{prefix_uri}/{self.id}")
+        node = rdflib.URIRef(f"{prefix_uri}{base_64_url_encode(self.id)}")
         graph.add((node, RDF.type, AASNameSpace.AAS["Submodel"]))
         # Identifiable
         Identifiable.append_as_rdf(self, graph, node)
@@ -97,7 +98,7 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
         if self.submodelElements:
             for idx, submodel_element in enumerate(self.submodelElements):
                 # headache
-                _, created_node = submodel_element.to_rdf(graph, node, prefix_uri=str(node) + "/submodel_elements/")
+                _, created_node = submodel_element.to_rdf(graph, node, prefix_uri=str(node) + "/submodel-elements/")
                 graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((node, AASNameSpace.AAS["Submodel/submodelElements"], created_node))
         return graph, node

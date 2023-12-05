@@ -174,6 +174,15 @@ def test_submodel_maximal_to_rdf():
     re_created = Submodel.from_rdf(graph, created_node)
     assert re_created == payload
 
+
+def test_asset_information_maximal_to_rdf():
+    payload_json = json.loads(get_testdata_json("AssetInformation", "maximal"))["assetAdministrationShells"][0]
+    payload = AssetAdministrationShell(**payload_json)
+    graph, created_node = payload.to_rdf()
+    re_created = AssetAdministrationShell.from_rdf(graph, created_node)
+    assert re_created == payload
+
+
 def test_submodel_maximal_to_rdf():
     payload = """
 {
@@ -345,11 +354,13 @@ def test_submodel_maximal_to_rdf():
     re_created = Submodel.from_rdf(graph, created_node)
     assert re_created == payload
 
+
 def test_any_submodel_element_minimal_to_rdf():
     for model in [
         "Property",
         "MultiLanguageProperty",
         "SubmodelElementCollection",
+        "AnnotatedRelationshipElement",
         # "File",
         # "Capability",
         # "SubmodelElementList",
@@ -358,7 +369,6 @@ def test_any_submodel_element_minimal_to_rdf():
         # "Entity",
         # "Blob",
         # "BasicEventElement",
-        # "AnnotatedRelationshipElement",
         # "ReferenceElement",
         # "RelationshipElement",
     ]:
@@ -375,7 +385,8 @@ def test_any_submodel_element_maximal_to_rdf():
         "Property",
         "MultiLanguageProperty",
         "SubmodelElementCollection",
-        # "File",
+        "AnnotatedRelationshipElement",
+        "File",
         # "Capability",
         # "SubmodelElementList",
         # "Range",
@@ -383,7 +394,6 @@ def test_any_submodel_element_maximal_to_rdf():
         # "Entity",
         # "Blob",
         # "BasicEventElement",
-        # "AnnotatedRelationshipElement",
         # "ReferenceElement",
         # "RelationshipElement",
     ]:
@@ -421,7 +431,7 @@ def test_asset_information_maximal_to_rdf():
     assert re_created == payload
 
 
-def test_asset_information_maximal_to_rdf():
+def test_asset_information_to_rdf():
     payload_json = json.loads(get_testdata_json("AssetInformation", "minimal"))["assetAdministrationShells"][0][
         "assetInformation"
     ]

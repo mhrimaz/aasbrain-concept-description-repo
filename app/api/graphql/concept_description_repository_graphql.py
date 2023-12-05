@@ -10,7 +10,7 @@ import os
 
 from app.models.response import APIException
 from app.repository import get_repository
-from app.repository.concept_description_repository import base_64_url_encode
+from app.models import base_64_url_encode
 
 type_defs = """
     enum ReferenceTypes{

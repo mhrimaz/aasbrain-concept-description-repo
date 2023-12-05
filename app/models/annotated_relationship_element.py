@@ -20,24 +20,34 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from enum import Enum
-from typing import Any, List, Optional, Union, Literal
+from typing import Any, List, Optional, Union, Literal, Annotated
 
 import rdflib
 from pydantic import BaseModel, Field, constr
 from rdflib import RDF
 
 from app.models.aas_namespace import AASNameSpace
+from app.models.blob import Blob
+from app.models.data_element import DataElement
+from app.models.file import File
 from app.models.has_data_specification import HasDataSpecification
 from app.models.model_type import ModelType
 from app.models.multi_language_property import MultiLanguageProperty
 from app.models.property import Property
+from app.models.range import Range
 from app.models.reference import Reference
+from app.models.reference_element import ReferenceElement
 from app.models.relationship_element_abstract import RelationshipElementAbstract
 
 
+DataElementChoice = Annotated[
+    Union[Property, MultiLanguageProperty, Range, ReferenceElement, File, Blob],
+    Field(discriminator="modelType"),
+]
+
+
 class AnnotatedRelationshipElement(RelationshipElementAbstract):
-    # TODO: workaround
-    annotations: List[Union[Property, MultiLanguageProperty]] = Field(None, min_length=0, discriminator="modelType")
+    annotations: Optional[List[DataElementChoice]] = Field(None, min_length=0)
     modelType: Literal["AnnotatedRelationshipElement"] = ModelType.AnnotatedRelationshipElement.value
 
     def to_rdf(
@@ -50,12 +60,30 @@ class AnnotatedRelationshipElement(RelationshipElementAbstract):
         created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
 
         created_graph.add((created_node, RDF.type, AASNameSpace.AAS["AnnotatedRelationshipElement"]))
+        if self.annotations:
+            for idx, annotation in enumerate(self.annotations):
+                _, created_sub_node = annotation.to_rdf(graph, created_node, prefix_uri=prefix_uri + self.idShort + ".")
+                created_graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
+                created_graph.add(
+                    (created_node, AASNameSpace.AAS["AnnotatedRelationshipElement/annotations"], created_sub_node)
+                )
         return created_graph, created_node
 
     @staticmethod
     def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "AnnotatedRelationshipElement":
         relation_element_abstract = RelationshipElementAbstract.from_rdf(graph, subject)
+        annotations_value = []
+        from app.models.util import from_unknown_rdf
+
+        for annotation_uriref in graph.objects(
+            subject=subject, predicate=AASNameSpace.AAS["AnnotatedRelationshipElement/annotations"]
+        ):
+            element = from_unknown_rdf(graph, annotation_uriref)
+            annotations_value.append(element)
+        if len(annotations_value) == 0:
+            annotations_value = None
         return AnnotatedRelationshipElement(
+            annotations=annotations_value,
             first=relation_element_abstract.first,
             second=relation_element_abstract.second,
             qualifiers=relation_element_abstract.qualifiers,

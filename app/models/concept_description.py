@@ -34,6 +34,7 @@ from app.models.identifiable import Identifiable
 from app.models.model_type import ModelType
 from app.models.rdfiable import RDFiable
 from app.models.reference import Reference
+from app.models import base_64_url_encode
 
 
 class ConceptDescription(Identifiable, HasDataSpecification, RDFiable):
@@ -50,7 +51,7 @@ class ConceptDescription(Identifiable, HasDataSpecification, RDFiable):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
-        node = rdflib.URIRef(f"{prefix_uri}/{self.id}")
+        node = rdflib.URIRef(f"{prefix_uri}{base_64_url_encode(self.id)}")
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["ConceptDescription"]))
 
         # Identifiable

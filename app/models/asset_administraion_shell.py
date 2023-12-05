@@ -33,6 +33,7 @@ from app.models.model_type import ModelType
 from app.models.rdfiable import RDFiable
 from app.models.reference import Reference
 from app.models.submodel import Submodel
+from app.models import base_64_url_encode
 
 
 class AssetAdministrationShell(Identifiable, HasDataSpecification, RDFiable):
@@ -52,7 +53,7 @@ class AssetAdministrationShell(Identifiable, HasDataSpecification, RDFiable):
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
 
-        node = rdflib.URIRef(f"{prefix_uri}/{self.id}")
+        node = rdflib.URIRef(f"{prefix_uri}{base_64_url_encode(self.id)}")
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["AssetAdministrationShell"]))
 
         # Identifiable

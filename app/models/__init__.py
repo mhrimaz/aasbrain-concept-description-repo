@@ -18,7 +18,16 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 import rdflib
+
+
+def base_64_url_encode(data: str) -> str:
+    return urlsafe_b64encode(data.encode("utf-8")).rstrip(b"=").decode("utf-8")
+
+
+def base_64_url_decode(base_64_url: str) -> str:
+    return urlsafe_b64decode(base_64_url + "=" * (4 - len(base_64_url) % 4)).decode("utf-8")
+
 
 rdflib.plugin.register("turtle_custom", rdflib.plugin.Serializer, "app.models.serializer", "TurtleSerializerCustom")

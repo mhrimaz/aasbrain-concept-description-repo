@@ -64,42 +64,12 @@ class SubmodelElementCollection(SubmodelElement):
     def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "SubmodelElementCollection":
         # submodelElements
         submodel_elements_value = []
+        from app.models.util import from_unknown_rdf
 
         for submodel_element_uriref in graph.objects(
             subject=subject, predicate=AASNameSpace.AAS["SubmodelElementCollection/value"]
         ):
-            type_ref: rdflib.URIRef = next(
-                graph.objects(subject=submodel_element_uriref, predicate=RDF.type),
-                None,
-            )
-            if type_ref == AASNameSpace.AAS["AnnotatedRelationshipElement"]:
-                element = AnnotatedRelationshipElement.from_rdf(graph, submodel_element_uriref)
-            if type_ref == AASNameSpace.AAS["RelationshipElement"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["BasicEventElement"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["Blob"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["File"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["MultiLanguageProperty"]:
-                element = MultiLanguageProperty.from_rdf(graph, submodel_element_uriref)
-            if type_ref == AASNameSpace.AAS["Property"]:
-                element = Property.from_rdf(graph, submodel_element_uriref)
-            if type_ref == AASNameSpace.AAS["Range"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["ReferenceElement"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["SubmodelElementCollection"]:
-                element = SubmodelElementCollection.from_rdf(graph, submodel_element_uriref)
-            if type_ref == AASNameSpace.AAS["SubmodelElementList"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["Entity"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["Capability"]:
-                raise NotImplementedError()
-            if type_ref == AASNameSpace.AAS["Operation"]:
-                raise NotImplementedError()
+            element = from_unknown_rdf(graph, submodel_element_uriref)
             submodel_elements_value.append(element)
 
         if len(submodel_elements_value) == 0:

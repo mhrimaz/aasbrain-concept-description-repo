@@ -20,19 +20,11 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from abc import abstractmethod
-from base64 import urlsafe_b64decode, urlsafe_b64encode
+
 from typing import List, Union
 
 from app.models.concept_description import ConceptDescription
 from app.models.response import GetConceptDescriptionsResult, Result, RepositoryMetadata
-
-
-def base_64_url_encode(data: str) -> str:
-    return urlsafe_b64encode(data.encode("utf-8")).rstrip(b"=").decode("utf-8")
-
-
-def base_64_url_decode(base_64_url: str) -> str:
-    return urlsafe_b64decode(base_64_url + "=" * (4 - len(base_64_url) % 4)).decode("utf-8")
 
 
 class ConceptDescriptionRepository(object):
