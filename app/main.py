@@ -40,6 +40,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from loguru import logger
+from starlette.responses import RedirectResponse
+from starlette.staticfiles import StaticFiles
 
 from app.api.graphql import concept_description_repository_graphql
 from app.api.rest import concept_description_repository_rest
@@ -241,13 +243,14 @@ async def favicon():
     return None
 
 
-include_ui = False
+include_ui = True
 if include_ui:
+    # Serve the frontend (Vue.js) as static files
+    app.mount("/home/", StaticFiles(directory="ui/cd-ui/dist", html=True), name="static")
 
     @app.get("/", include_in_schema=False)
     async def home():
-        # TODO: add ui
-        return "No UI!"
+        return RedirectResponse(url="/home/")
 
 else:
 
