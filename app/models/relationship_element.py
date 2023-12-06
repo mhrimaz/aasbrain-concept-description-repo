@@ -20,9 +20,41 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from typing import Literal
 
+import rdflib
+from rdflib import RDF
+
+from app.models.aas_namespace import AASNameSpace
 from app.models.model_type import ModelType
 from app.models.relationship_element_abstract import RelationshipElementAbstract
 
 
 class RelationshipElement(RelationshipElementAbstract):
     modelType: Literal["RelationshipElement"] = ModelType.RelationshipElement.value
+
+    def to_rdf(
+        self,
+        graph: rdflib.Graph = None,
+        parent_node: rdflib.IdentifiedNode = None,
+        prefix_uri: str = "",
+        base_uri: str = "",
+    ) -> (rdflib.Graph, rdflib.IdentifiedNode):
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph.add((created_node, RDF.type, AASNameSpace.AAS["RelationshipElement"]))
+        return created_graph, created_node
+
+    @staticmethod
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "RelationshipElement":
+        element = RelationshipElementAbstract.from_rdf(graph, subject)
+        return RelationshipElement(
+            first=element.first,
+            second=element.second,
+            qualifiers=element.qualifiers,
+            category=element.category,
+            idShort=element.idShort,
+            displayName=element.displayName,
+            description=element.description,
+            extensions=element.extensions,
+            semanticId=element.semanticId,
+            supplementalSemanticIds=element.supplementalSemanticIds,
+            embeddedDataSpecifications=element.embeddedDataSpecifications,
+        )

@@ -104,7 +104,7 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
         return graph, node
 
     @staticmethod
-    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode):
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "Submodel":
         # HasSemantics
         has_semantics = HasSemantics.from_rdf(graph, subject)
         # Identifiable

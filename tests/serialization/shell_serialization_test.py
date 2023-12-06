@@ -366,16 +366,15 @@ def test_any_submodel_element_minimal_to_rdf():
         "Blob",
         "Range",
         "ReferenceElement",
-        # "RelationshipElement",
-        # "Operation",
-        # "Entity",
-        # "BasicEventElement",
-        # "SubmodelElementList",
+        "RelationshipElement",
+        "Entity",
+        "SubmodelElementList",
+        "BasicEventElement",
+        "Operation",
     ]:
         payload_json = json.loads(get_testdata_json(model, "minimal"))["submodels"][0]
         payload = Submodel(**payload_json)
         graph, created_node = payload.to_rdf()
-        print(graph.serialize(format="turtle_custom"))
         re_created = Submodel.from_rdf(graph, created_node)
         assert re_created == payload
 
@@ -391,17 +390,15 @@ def test_any_submodel_element_maximal_to_rdf():
         "Blob",
         "Range",
         "ReferenceElement",
-        # "RelationshipElement",
-        # "Operation",
-        # "Entity",
-        # "BasicEventElement",
-
-        # "SubmodelElementList",
+        "RelationshipElement",
+        "Entity",
+        "SubmodelElementList",
+        "BasicEventElement",
+        "Operation",
     ]:
         payload_json = json.loads(get_testdata_json(model, "maximal"))["submodels"][0]
         payload = Submodel(**payload_json)
         graph, created_node = payload.to_rdf()
-        print(graph.serialize(format="turtle_custom"))
         re_created = Submodel.from_rdf(graph, created_node)
         assert re_created == payload
 

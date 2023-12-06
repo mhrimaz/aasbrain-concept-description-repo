@@ -18,8 +18,11 @@
 #  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+import rdflib
 from pydantic import BaseModel
+from rdflib import RDF
 
+from app.models.aas_namespace import AASNameSpace
 from app.models.event_element import EventElement
 from app.models.model_type import ModelType
 from app.models.reference import Reference
@@ -37,16 +40,17 @@ from app.models.property import Property
 from app.models.range import Range
 from app.models.reference_element import ReferenceElement
 from app.models.relationship_element import RelationshipElement
+from app.models.submodel_element import SubmodelElement
 
 
 class Direction(Enum):
-    input = "input"
-    output = "output"
+    Input = "input"
+    Output = "output"
 
 
 class StateOfEvent(Enum):
-    off = "off"
-    on = "on"
+    Off = "off"
+    On = "on"
 
 
 class BasicEventElement(EventElement):
@@ -64,3 +68,138 @@ class BasicEventElement(EventElement):
     minInterval: Optional[constr()] = None
     maxInterval: Optional[constr()] = None
     modelType: Literal["BasicEventElement"] = ModelType.BasicEventElement.value
+
+    def to_rdf(
+        self,
+        graph: rdflib.Graph = None,
+        parent_node: rdflib.IdentifiedNode = None,
+        prefix_uri: str = "",
+        base_uri: str = "",
+    ) -> (rdflib.Graph, rdflib.IdentifiedNode):
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph.add((created_node, RDF.type, AASNameSpace.AAS["BasicEventElement"]))
+
+        _, created_observed_node = self.observed.to_rdf(created_graph, created_node)
+        created_graph.add((created_node, AASNameSpace.AAS["BasicEventElement/observed"], created_observed_node))
+        created_graph.add(
+            (
+                created_node,
+                AASNameSpace.AAS["BasicEventElement/direction"],
+                AASNameSpace.AAS[f"Direction/{self.direction.name}"],
+            )
+        )
+        created_graph.add(
+            (
+                created_node,
+                AASNameSpace.AAS["BasicEventElement/state"],
+                AASNameSpace.AAS[f"StateOfEvent/{self.state.name}"],
+            )
+        )
+        if self.messageTopic:
+            _, created_message_broker_node = self.messageBroker.to_rdf(created_graph, created_node)
+            created_graph.add(
+                (created_node, AASNameSpace.AAS["BasicEventElement/messageBroker"], created_message_broker_node)
+            )
+        if self.messageBroker:
+            created_graph.add(
+                (created_node, AASNameSpace.AAS["BasicEventElement/messageTopic"], rdflib.Literal(self.messageTopic))
+            )
+        if self.lastUpdate:
+            created_graph.add(
+                (created_node, AASNameSpace.AAS["BasicEventElement/lastUpdate"], rdflib.Literal(self.lastUpdate))
+            )
+        if self.minInterval:
+            created_graph.add(
+                (created_node, AASNameSpace.AAS["BasicEventElement/minInterval"], rdflib.Literal(self.minInterval))
+            )
+        if self.maxInterval:
+            created_graph.add(
+                (created_node, AASNameSpace.AAS["BasicEventElement/maxInterval"], rdflib.Literal(self.maxInterval))
+            )
+        return created_graph, created_node
+
+    @staticmethod
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "BasicEventElement":
+        observed_value = None
+        observed_ref: rdflib.URIRef = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/observed"]),
+            None,
+        )
+        if observed_ref:
+            observed_value = Reference.from_rdf(graph, observed_ref)
+
+        direction_value = None
+        direction_ref: rdflib.URIRef = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/direction"]),
+            None,
+        )
+        if direction_ref:
+            direction_value = Direction[direction_ref[direction_ref.rfind("/") + 1 :]]
+
+        state_value = None
+        state_ref: rdflib.URIRef = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/state"]),
+            None,
+        )
+        if state_ref:
+            state_value = StateOfEvent[state_ref[state_ref.rfind("/") + 1 :]]
+
+        message_topic_value = None
+        message_topic_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/messageTopic"]),
+            None,
+        )
+        if message_topic_ref:
+            message_topic_value = message_topic_ref.value
+
+        message_broker_value = None
+        message_broker_ref: rdflib.URIRef = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/messageBroker"]),
+            None,
+        )
+        if message_broker_ref:
+            message_broker_value = Reference.from_rdf(graph, message_broker_ref)
+
+        last_update_value = None
+        last_update_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/lastUpdate"]),
+            None,
+        )
+        if last_update_ref:
+            last_update_value = last_update_ref.value
+        min_interval_value = None
+        min_interval_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/minInterval"]),
+            None,
+        )
+        if min_interval_ref:
+            min_interval_value = min_interval_ref.value
+
+        max_interval_value = None
+        max_interval_ref: rdflib.Literal = next(
+            graph.objects(subject=subject, predicate=AASNameSpace.AAS["BasicEventElement/maxInterval"]),
+            None,
+        )
+        if max_interval_ref:
+            max_interval_value = max_interval_ref.value
+
+        submodel_element = SubmodelElement.from_rdf(graph, subject)
+        return BasicEventElement(
+            observed=observed_value,
+            direction=direction_value,
+            state=state_value,
+            messageTopic=message_topic_value,
+            messageBroker=message_broker_value,
+            lastUpdate=last_update_value,
+            minInterval=min_interval_value,
+            maxInterval=max_interval_value,
+            qualifiers=submodel_element.qualifiers,
+            category=submodel_element.category,
+            idShort=submodel_element.idShort,
+            displayName=submodel_element.displayName,
+            description=submodel_element.description,
+            extensions=submodel_element.extensions,
+            semanticId=submodel_element.semanticId,
+            supplementalSemanticIds=submodel_element.supplementalSemanticIds,
+            embeddedDataSpecifications=submodel_element.embeddedDataSpecifications,
+        )
