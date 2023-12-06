@@ -55,9 +55,7 @@ class SubmodelElementCollection(SubmodelElement):
         if self.value:
             for idx, submodel_element in enumerate(self.value):
                 # headache
-                _, created_sub_node = submodel_element.to_rdf(
-                    graph, created_node, prefix_uri=prefix_uri + str(created_node) + "."
-                )
+                _, created_sub_node = submodel_element.to_rdf(graph, created_node, prefix_uri=str(created_node) + ".")
                 graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((created_node, AASNameSpace.AAS["SubmodelElementCollection/value"], created_sub_node))
         return created_graph, created_node

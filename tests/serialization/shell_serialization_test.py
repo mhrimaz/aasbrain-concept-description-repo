@@ -297,6 +297,14 @@ def test_submodel_maximal_to_rdf():
                     "text":"Chemical system"
                 }
             ],
+            "value":[
+                 {
+                    "idShort":"DeviceModel",
+                    "valueType":"xs:string",
+                    "value":"",
+                    "modelType":"Property"
+                }
+            ],
             "modelType":"SubmodelElementCollection"
         },
         {

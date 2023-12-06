@@ -106,9 +106,7 @@ class SubmodelElementList(SubmodelElement):
             )
         if self.value:
             for idx, element_value in enumerate(self.value):
-                _, created_sub_node = element_value.to_rdf(
-                    graph, created_node, prefix_uri=prefix_uri + str(created_node) + "."
-                )
+                _, created_sub_node = element_value.to_rdf(graph, created_node, prefix_uri=str(created_node) + ".")
                 graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((created_node, AASNameSpace.AAS["SubmodelElementList/value"], created_sub_node))
 
