@@ -243,7 +243,7 @@ async def favicon():
     return None
 
 
-include_ui = True
+include_ui = False
 if include_ui:
     # Serve the frontend (Vue.js) as static files
     app.mount("/home/", StaticFiles(directory="ui/cd-ui/dist", html=True), name="static")
