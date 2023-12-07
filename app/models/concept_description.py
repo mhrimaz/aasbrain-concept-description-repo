@@ -69,7 +69,7 @@ class ConceptDescription(Identifiable, HasDataSpecification, RDFiable):
         return graph, node
 
     @staticmethod
-    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode):
+    def from_rdf(graph: rdflib.Graph, subject: rdflib.IdentifiedNode) -> "ConceptDescription":
         # Idenfiable
         identifiable = Identifiable.from_rdf(graph, subject)
 

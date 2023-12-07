@@ -128,3 +128,8 @@ class InvalidPayloadException(APIException):
 class OperationNotAllowedException(APIException):
     message = """This operation is not allowed."""
     error_code = 403
+
+
+class InvalidBase64URLIdentifier(APIException):
+    message = """The provided identifier is not a valid base64url."""
+    error_code = 403

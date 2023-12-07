@@ -23,11 +23,23 @@ import rdflib
 
 
 def base_64_url_encode(data: str) -> str:
-    return urlsafe_b64encode(data.encode("utf-8")).rstrip(b"=").decode("utf-8")
+    try:
+        result = urlsafe_b64encode(data.encode("utf-8")).rstrip(b"=").decode("utf-8")
+    except Exception:
+        import app.models.response
+
+        raise app.models.response.InvalidBase64URLIdentifier()
+    return result
 
 
 def base_64_url_decode(base_64_url: str) -> str:
-    return urlsafe_b64decode(base_64_url + "=" * (4 - len(base_64_url) % 4)).decode("utf-8")
+    try:
+        result = urlsafe_b64decode(base_64_url + "=" * (4 - len(base_64_url) % 4)).decode("utf-8")
+    except Exception:
+        import app.models.response
+
+        raise app.models.response.InvalidBase64URLIdentifier()
+    return result
 
 
 rdflib.plugin.register("turtle_custom", rdflib.plugin.Serializer, "app.models.serializer", "TurtleSerializerCustom")

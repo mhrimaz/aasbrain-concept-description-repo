@@ -61,7 +61,7 @@ async def lifespan(app: FastAPI):
     repo = await get_repository()
     await repo.connect_to_database({"DB_URI": config.db_uri})
     script_dir = os.path.dirname(__file__)
-    with open(os.path.join(script_dir, "repository", "mock_concepts.json")) as mock:
+    with open(os.path.join(script_dir, "repository", "mock_concepts.json"), encoding="utf-8") as mock:
         cds = json.load(mock)
         cd_repo = await get_repository()
         for cd in cds:

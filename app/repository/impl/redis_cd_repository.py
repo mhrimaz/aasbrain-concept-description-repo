@@ -76,7 +76,7 @@ class RedisConceptDescriptionRepository(ConceptDescriptionRepository):
     async def get_concept_description(self, cd_id_base64url_encoded: str) -> ConceptDescription:
         result = self.client.get(cd_id_base64url_encoded)
         if result is None:
-            raise ConceptNotFoundException("Not exist")
+            raise ConceptNotFoundException()
         return ConceptDescription.model_validate(json.loads(result))
 
     async def add_concept_description(self, concept_description: ConceptDescription) -> ConceptDescription:

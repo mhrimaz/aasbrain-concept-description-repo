@@ -106,7 +106,9 @@ async def convert_submodel_to_rdf(
 ):
     payload = Submodel(**submodel)
     graph, _ = payload.to_rdf()
-    return fastapi.Response(content=graph.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
+    return fastapi.Response(
+        content=graph.serialize(format="turtle_custom", encoding="utf-8"), media_type="text/turtle", status_code=200
+    )
 
 
 @router.post("/concept-description:jsontordf", tags=["RDF"])
@@ -115,7 +117,9 @@ async def convert_concept_description_to_rdf(
 ):
     payload = ConceptDescription(**concept)
     graph, _ = payload.to_rdf()
-    return fastapi.Response(content=graph.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
+    return fastapi.Response(
+        content=graph.serialize(format="turtle_custom", encoding="utf-8"), media_type="text/turtle", status_code=200
+    )
 
 
 @router.post("/shell:jsontordf", tags=["RDF"])
@@ -129,4 +133,6 @@ async def convert_shell_to_rdf(
 ):
     payload = AssetAdministrationShell(**shell)
     graph, _ = payload.to_rdf()
-    return fastapi.Response(content=graph.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
+    return fastapi.Response(
+        content=graph.serialize(format="turtle_custom", encoding="utf-8"), media_type="text/turtle", status_code=200
+    )

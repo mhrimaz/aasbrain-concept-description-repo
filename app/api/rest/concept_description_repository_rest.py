@@ -200,11 +200,13 @@ async def get_concept_description(
     if content_type == "application/ld+json":
         g, _ = result.to_rdf()
         return fastapi.Response(
-            content=g.serialize(format="json-ld"), media_type="application/ld+json", status_code=200
+            content=g.serialize(format="json-ld", encoding="utf-8"), media_type="application/ld+json", status_code=200
         )
     if content_type == "text/turtle":
         g, _ = result.to_rdf()
-        return fastapi.Response(content=g.serialize(format="turtle_custom"), media_type="text/turtle", status_code=200)
+        return fastapi.Response(
+            content=g.serialize(format="turtle_custom", encoding="utf-8"), media_type="text/turtle", status_code=200
+        )
     if content_type == "application/xml":
         raise NotImplementedError("XML serialization not supported")
     result = result.model_dump_json(exclude_none=True)

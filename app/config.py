@@ -21,16 +21,26 @@
 
 import os
 from functools import lru_cache
+from typing import Optional
 
 from pydantic_settings import BaseSettings
 
 
 class Config(BaseSettings):
     app_name: str = "AAS Brain Concept Description Repository API"
-    mongo_db_name: str = "concept_description_db"
     db_backend: str = os.getenv("BACKEND", "redis")
     db_uri: str = os.getenv("DB_URI", "redis://127.0.0.1:6019")
     debug: bool = os.getenv("DEBUG", False)
+    # Options for GraphDB
+    semantic_namespace: Optional[str] = os.getenv("SEMANTIC_NAMESPACE", "https://aasbrain/")
+    semantic_graphdb_repo: Optional[str] = os.getenv("SEMANTIC_GRAPHDB_REPO", "aas")
+    # Options for MongoDB
+    mongo_db_name: str = os.getenv("MONGO_DB_NAME", "concept_description_db")
+    # Options for Redis
+
+    # Options for Neo4j
+
+    # Options for Hybrid
 
 
 @lru_cache()

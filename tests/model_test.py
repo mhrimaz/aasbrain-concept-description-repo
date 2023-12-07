@@ -15,7 +15,7 @@ def get_testdata_rdf(element: str, type="minimal"):
     with open(
         os.path.join(
             os.path.dirname(__file__), "schemas", "schemas", "rdf", "examples", "generated", element, f"{type}.ttl"
-        )
+        ), encoding='utf-8'
     ) as f:
         content = f.read()
     return content
@@ -26,7 +26,7 @@ def get_testdata_json(element: str, type="minimal"):
     with open(
         os.path.join(
             os.path.dirname(__file__), "schemas", "schemas", "json", "examples", "generated", element, f"{type}.json"
-        )
+        ), encoding='utf-8'
     ) as f:
         content = f.read()
     return content
