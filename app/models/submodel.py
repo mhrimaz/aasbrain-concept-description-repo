@@ -153,4 +153,4 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
             extensions=identifiable.extensions,
             semanticId=has_semantics.semanticId,
             supplementalSemanticIds=has_semantics.supplementalSemanticIds,
-
+        )
