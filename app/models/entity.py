@@ -56,8 +56,9 @@ class Entity(SubmodelElement):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
-        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri, id_strategy)
         created_graph.add((created_node, RDF.type, AASNameSpace.AAS["Entity"]))
 
         created_graph.add(
@@ -70,7 +71,11 @@ class Entity(SubmodelElement):
         if self.statements:
             for idx, statement in enumerate(self.statements):
                 _, created_sub_node = statement.to_rdf(
-                    graph, created_node, prefix_uri=prefix_uri + str(created_node) + "."
+                    graph,
+                    created_node,
+                    prefix_uri=prefix_uri + self.idShort + ".",
+                    base_uri=base_uri,
+                    id_strategy=id_strategy,
                 )
                 graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((created_node, AASNameSpace.AAS["Entity/statements"], created_sub_node))
@@ -85,9 +90,7 @@ class Entity(SubmodelElement):
 
         if self.specificAssetIds:
             for idx, specific_asset_id in enumerate(self.specificAssetIds):
-                _, created_sub_node = specific_asset_id.to_rdf(
-                    graph, created_node, prefix_uri=prefix_uri + str(created_node) + "."
-                )
+                _, created_sub_node = specific_asset_id.to_rdf(graph, created_node, prefix_uri=str(created_node) + ".")
                 graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((created_node, AASNameSpace.AAS["Entity/specificAssetIds"], created_sub_node))
         return created_graph, created_node

@@ -27,6 +27,7 @@ import rdflib
 from pydantic import BaseModel, Field, constr
 from rdflib import RDF
 
+from app.models import base_64_url_encode, url_encode
 from app.models.aas_namespace import AASNameSpace
 from app.models.has_data_specification import HasDataSpecification
 from app.models.has_semantics import HasSemantics
@@ -43,11 +44,13 @@ class SubmodelElement(Referable, HasSemantics, Qualifiable, HasDataSpecification
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
-        node = rdflib.URIRef(f"{prefix_uri}{self.idShort}")
+
+        node = rdflib.URIRef(f"{base_uri}{prefix_uri}{self.idShort}")
 
         # Referable
         Referable.append_as_rdf(self, graph, node)

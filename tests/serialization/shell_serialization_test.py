@@ -165,15 +165,15 @@ def test_asset_information_maximal_to_rdf():
     assert re_created == payload
 
 
-def test_submodel_maximal_to_rdf():
+def test_custom_submodel_maximal_to_rdf():
     payload = """
 {
-    "idShort":"DeviceSpecification",
+    "idShort":"DeviceSubmodel",
     "administration":{
         "version":"0",
         "revision":"5"
     },
-    "id":"DeviceSpecification",
+    "id":"http://example.com",
     "kind":"Instance",
     "qualifiers":[
         {
@@ -185,7 +185,7 @@ def test_submodel_maximal_to_rdf():
     "submodelElements":[
         {
             "category":"CONSTANT",
-            "idShort":"DeviceCategory",
+            "idShort":"DeviceCategorySMC",
             "value":[
                 {
                     "category":"CONSTANT",
@@ -339,8 +339,23 @@ def test_submodel_maximal_to_rdf():
     payload_json = json.loads(payload)
     payload = Submodel(**payload_json)
     graph, created_node = payload.to_rdf()
+    # print(graph.serialize(format="turtle"))
+    graph2, created_node2 = payload.to_rdf(base_uri="https://ns.myaas.ai/dt/")
+    # print(graph2.serialize(format="turtle"))
+    graph3, created_node3 = payload.to_rdf(base_uri="https://ns.myaas.ai/dt/", id_strategy="base64-url-encode")
+    # print(graph3.serialize(format="turtle"))
+    graph4, created_node4 = payload.to_rdf(id_strategy="base64-url-encode")
+    # print(graph4.serialize(format="turtle"))
+
     re_created = Submodel.from_rdf(graph, created_node)
+    re_created2 = Submodel.from_rdf(graph2, created_node2)
+    re_created3 = Submodel.from_rdf(graph3, created_node3)
+    re_created4 = Submodel.from_rdf(graph4, created_node4)
     assert re_created == payload
+    assert re_created2 == payload
+    assert re_created3 == payload
+    assert re_created4 == payload
+
 
 
 def test_any_submodel_element_to_rdf():
@@ -364,6 +379,7 @@ def test_any_submodel_element_to_rdf():
         for model in elements_in_submodel_env:
             payload_json = json.loads(get_testdata_json(model, test_type))["submodels"][0]
             payload = Submodel(**payload_json)
+
             graph, created_node = payload.to_rdf()
             re_created = Submodel.from_rdf(graph, created_node)
             assert re_created == payload
@@ -373,6 +389,7 @@ def test_aas_minimal_to_rdf():
     payload_json = json.loads(get_testdata_json("AssetAdministrationShell", "minimal"))["assetAdministrationShells"][0]
     payload = AssetAdministrationShell(**payload_json)
     graph, created_node = payload.to_rdf()
+    print(graph.serialize(format="turtle_custom"))
     re_created = AssetAdministrationShell.from_rdf(graph, created_node)
     assert re_created == payload
 

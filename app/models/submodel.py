@@ -44,7 +44,7 @@ from app.models.reference import Reference
 from app.models.submodel_element import SubmodelElement
 from app.models.submodel_element_choice import SubmodelElementChoice
 from app.models.util import from_unknown_rdf
-from app.models import base_64_url_encode
+from app.models import base_64_url_encode, url_encode
 
 
 class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecification, RDFiable):
@@ -61,12 +61,17 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
+            graph.bind("myaas", base_uri)
 
-        node = rdflib.URIRef(f"{prefix_uri}{base_64_url_encode(self.id)}")
+        if id_strategy == "base64-url-encode":
+            node = rdflib.URIRef(f"{base_uri}{base_64_url_encode(self.id)}")
+        else:
+            node = rdflib.URIRef(f"{base_uri}{url_encode(self.id)}")
         graph.add((node, RDF.type, AASNameSpace.AAS["Submodel"]))
         # Identifiable
         Identifiable.append_as_rdf(self, graph, node)
@@ -98,7 +103,16 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
         if self.submodelElements:
             for idx, submodel_element in enumerate(self.submodelElements):
                 # headache
-                _, created_node = submodel_element.to_rdf(graph, node, prefix_uri=str(node) + "/submodel-elements/")
+
+                common_pref = ""
+                if id_strategy == "base64-url-encode":
+                    prefix_uri = f"{base_64_url_encode(self.id)}/submodel-elements/"
+                else:
+                    prefix_uri = f"{url_encode(self.id+'/submodel-elements/')}"
+
+                _, created_node = submodel_element.to_rdf(
+                    graph, node, prefix_uri=prefix_uri, base_uri=base_uri, id_strategy=id_strategy
+                )
                 graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((node, AASNameSpace.AAS["Submodel/submodelElements"], created_node))
         return graph, node

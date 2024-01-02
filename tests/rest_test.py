@@ -24,6 +24,7 @@ repository_name = "aas"  # GraphDB repository name
 base_url = f"{graphdb_endpoint}/repositories/{repository_name}/statements"
 base_prefix = "https://aasbrain"
 jena_base_url = f"http://127.0.0.1:3030/{repository_name}/update"
+blazegraph_url = f"http://127.0.0.1:8389/bigdata/namespace/kb/sparql"
 
 
 def gen_nested_submodel_collections(nesting_level=5):
@@ -113,6 +114,10 @@ def insert_rdf_into_triplestore(element: Union[ConceptDescription, Submodel, Ass
         jena_response = requests.request("POST", jena_base_url, headers=headers, data=payload)
         jena_response.raise_for_status()  # Raise an exception for 4xx and 5xx HTTP status codes
         # print("RDF data inserted successfully.")
+        blazegraph_response = requests.request("POST", blazegraph_url, headers=headers, data=payload)
+        blazegraph_response.raise_for_status()  # Raise an exception for 4xx and 5xx HTTP status codes
+        # print("RDF data inserted successfully.")
+
     except Exception as ex:
         print(ex)
         print(f"HTTP Error:", rdf_data_no_prefix)
@@ -121,7 +126,7 @@ def insert_rdf_into_triplestore(element: Union[ConceptDescription, Submodel, Ass
 
 if __name__ == "__main__":
     basyx = "http://127.0.0.1:8085"
-    size = 30
+    size = 3000
     submodels_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/new data 11.2023/dataset2_json/submodels_{size}.json"
     url = f"{basyx}/submodels/"
     print("Adding Submodels")

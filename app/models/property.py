@@ -52,8 +52,9 @@ class Property(DataElement):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
-        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri, id_strategy)
         created_graph.add((created_node, RDF.type, AASNameSpace.AAS["Property"]))
         created_graph.add(
             (

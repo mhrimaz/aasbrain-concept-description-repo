@@ -31,6 +31,7 @@ from rdflib.plugins.serializers.turtle import TurtleSerializer
 import pydantic
 from pydantic import BaseModel, Field, constr
 
+from app.models import url_encode, base_64_url_encode
 from app.models.aas_namespace import AASNameSpace
 from app.models.asset_kind import AssetKind
 from app.models.rdfiable import RDFiable
@@ -61,13 +62,17 @@ class AssetInformation(BaseModel, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = Graph()
             graph.bind("aas", AASNameSpace.AAS)
 
         if self.globalAssetId:
-            node = rdflib.URIRef(f"asset-information/{self.globalAssetId}")
+            if id_strategy == "base64-url-encode":
+                node = rdflib.URIRef(f"{base_uri}{base_64_url_encode(self.globalAssetId)}")
+            else:
+                node = rdflib.URIRef(url_encode(f"{base_uri}{url_encode(self.globalAssetId)}"))
         else:
             node = rdflib.BNode()
         graph.add((node, RDF.type, rdflib.URIRef(AASNameSpace.AAS["AssetInformation"])))
@@ -110,7 +115,7 @@ class AssetInformation(BaseModel, RDFiable):
             graph.add((node, AASNameSpace.AAS["AssetInformation/defaultThumbnail"], thumbnail))
         if self.specificAssetIds and len(self.specificAssetIds) > 0:
             for idx, specific_asset_id_ref in enumerate(self.specificAssetIds):
-                _, created_node = specific_asset_id_ref.to_rdf(graph, node)
+                _, created_node = specific_asset_id_ref.to_rdf(graph, node, prefix_uri, base_uri, id_strategy)
                 graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((node, AASNameSpace.AAS["AssetInformation/specificAssetIds"], created_node))
         return graph, node

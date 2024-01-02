@@ -35,3 +35,4 @@ HoRi 2023.12.04 - Why modelType: Literal['Property'] = ModelType.Property.value?
 
 HoRi 2023.12.13 - MongoDB is not a good choice for Submodel, at least the nested normal version of submodle. For CD and Shell it is fine because they are not nested. the schema of mongodb for submodel should be different.
 
+HoRi 2024.01.02 - Using base64url-encoded id as uri wasn't a good idea since it is not easy to express that in SPARQL. Instead built-in operations for uri encode is already there. but metamodel uses base64 :).

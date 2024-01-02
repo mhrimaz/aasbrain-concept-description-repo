@@ -19,6 +19,7 @@
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from base64 import urlsafe_b64decode, urlsafe_b64encode
+from urllib.parse import quote, unquote
 import rdflib
 
 
@@ -32,6 +33,10 @@ def base_64_url_encode(data: str) -> str:
     return result
 
 
+def url_encode(data: str) -> str:
+    return quote(data, safe="")
+
+
 def base_64_url_decode(base_64_url: str) -> str:
     try:
         result = urlsafe_b64decode(base_64_url + "=" * (4 - len(base_64_url) % 4)).decode("utf-8")
@@ -40,6 +45,10 @@ def base_64_url_decode(base_64_url: str) -> str:
 
         raise app.models.response.InvalidBase64URLIdentifier()
     return result
+
+
+def url_decode(url_encoded_data: str) -> str:
+    return unquote(url_encoded_data)
 
 
 rdflib.plugin.register("turtle_custom", rdflib.plugin.Serializer, "app.models.serializer", "TurtleSerializerCustom")

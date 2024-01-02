@@ -41,6 +41,7 @@ class LangStringPreferredNameTypeIec61360(AbstractLangString, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
@@ -73,6 +74,7 @@ class LangStringShortNameTypeIec61360(AbstractLangString, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
@@ -105,6 +107,7 @@ class LangStringDefinitionTypeIec61360(AbstractLangString, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
@@ -158,10 +161,12 @@ class LevelType(BaseModel, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
+
         node = rdflib.BNode()
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["LevelType"]))
         graph.add((node, AASNameSpace.AAS["LevelType/min"], rdflib.Literal(self.min)))
@@ -226,20 +231,26 @@ class DataSpecificationIec61360(BaseModel, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
+
         node = rdflib.BNode()
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["DataSpecificationIec61360"]))
         for idx, preferredName in enumerate(self.preferredName):
-            _, created_node = preferredName.to_rdf(graph=graph, parent_node=node)
+            _, created_node = preferredName.to_rdf(
+                graph=graph, parent_node=node, prefix_uri=prefix_uri, base_uri=base_uri, id_strategy=id_strategy
+            )
             graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
             graph.add((node, AASNameSpace.AAS["DataSpecificationIec61360/preferredName"], created_node))
 
         if self.shortName:
             for idx, shortName in enumerate(self.shortName):
-                _, created_node = shortName.to_rdf(graph=graph, parent_node=node)
+                _, created_node = shortName.to_rdf(
+                    graph=graph, parent_node=node, prefix_uri=prefix_uri, base_uri=base_uri, id_strategy=id_strategy
+                )
                 graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add(
                     (

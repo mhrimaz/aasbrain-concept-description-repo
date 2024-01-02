@@ -48,14 +48,21 @@ class SubmodelElementCollection(SubmodelElement):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
-        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri, id_strategy)
 
         created_graph.add((created_node, RDF.type, AASNameSpace.AAS["SubmodelElementCollection"]))
         if self.value:
             for idx, submodel_element in enumerate(self.value):
                 # headache
-                _, created_sub_node = submodel_element.to_rdf(graph, created_node, prefix_uri=str(created_node) + ".")
+                _, created_sub_node = submodel_element.to_rdf(
+                    graph,
+                    created_node,
+                    prefix_uri=prefix_uri + self.idShort + ".",
+                    base_uri=base_uri,
+                    id_strategy=id_strategy,
+                )
                 graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((created_node, AASNameSpace.AAS["SubmodelElementCollection/value"], created_sub_node))
         return created_graph, created_node

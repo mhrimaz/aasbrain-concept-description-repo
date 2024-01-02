@@ -56,13 +56,20 @@ class AnnotatedRelationshipElement(RelationshipElementAbstract):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
-        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri)
+        created_graph, created_node = super().to_rdf(graph, parent_node, prefix_uri, base_uri, id_strategy)
 
         created_graph.add((created_node, RDF.type, AASNameSpace.AAS["AnnotatedRelationshipElement"]))
         if self.annotations:
             for idx, annotation in enumerate(self.annotations):
-                _, created_sub_node = annotation.to_rdf(graph, created_node, prefix_uri=prefix_uri + self.idShort + ".")
+                _, created_sub_node = annotation.to_rdf(
+                    graph,
+                    created_node,
+                    base_uri=base_uri,
+                    prefix_uri=prefix_uri + self.idShort + ".",
+                    id_strategy=id_strategy,
+                )
                 created_graph.add((created_sub_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 created_graph.add(
                     (created_node, AASNameSpace.AAS["AnnotatedRelationshipElement/annotations"], created_sub_node)

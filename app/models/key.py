@@ -42,10 +42,12 @@ class Key(BaseModel, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
+
         node = rdflib.BNode()
 
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["Key"]))

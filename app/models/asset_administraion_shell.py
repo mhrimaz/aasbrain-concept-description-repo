@@ -33,7 +33,7 @@ from app.models.model_type import ModelType
 from app.models.rdfiable import RDFiable
 from app.models.reference import Reference
 from app.models.submodel import Submodel
-from app.models import base_64_url_encode
+from app.models import base_64_url_encode, url_encode
 
 
 class AssetAdministrationShell(Identifiable, HasDataSpecification, RDFiable):
@@ -48,12 +48,18 @@ class AssetAdministrationShell(Identifiable, HasDataSpecification, RDFiable):
         parent_node: rdflib.IdentifiedNode = None,
         prefix_uri: str = "",
         base_uri: str = "",
+        id_strategy: str = "",
     ) -> (rdflib.Graph, rdflib.IdentifiedNode):
         if graph == None:
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
+            graph.bind("myaas", base_uri)
 
-        node = rdflib.URIRef(f"{prefix_uri}{base_64_url_encode(self.id)}")
+        if id_strategy == "base64-url-encode":
+            node = rdflib.URIRef(f"{base_uri}{base_64_url_encode(self.id)}")
+        else:
+            node = rdflib.URIRef(f"{base_uri}{url_encode(self.id)}")
+
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["AssetAdministrationShell"]))
 
         # Identifiable
@@ -64,15 +70,21 @@ class AssetAdministrationShell(Identifiable, HasDataSpecification, RDFiable):
         HasDataSpecification.append_as_rdf(self, graph, node)
 
         if self.derivedFrom:
-            _, created_node = self.derivedFrom.to_rdf(graph, node)
+            _, created_node = self.derivedFrom.to_rdf(
+                graph, node, base_uri=base_uri, prefix_uri=prefix_uri, id_strategy=id_strategy
+            )
             graph.add((node, AASNameSpace.AAS["AssetAdministrationShell/derivedFrom"], created_node))
 
-        _, created_asset_info_node = self.assetInformation.to_rdf(graph, node)
+        _, created_asset_info_node = self.assetInformation.to_rdf(
+            graph, node, base_uri=base_uri, prefix_uri=prefix_uri, id_strategy=id_strategy
+        )
         graph.add((node, AASNameSpace.AAS["AssetAdministrationShell/assetInformation"], created_asset_info_node))
 
         if self.submodels and len(self.submodels) > 0:
             for idx, submodel_ref in enumerate(self.submodels):
-                _, created_ref_node = submodel_ref.to_rdf(graph, node)
+                _, created_ref_node = submodel_ref.to_rdf(
+                    graph, node, base_uri=base_uri, prefix_uri=prefix_uri, id_strategy=id_strategy
+                )
                 graph.add((created_ref_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((node, AASNameSpace.AAS["AssetAdministrationShell/submodels"], created_ref_node))
 
