@@ -16,6 +16,7 @@ from app.models.data_specification_iec_61360 import DataSpecificationIec61360
 from app.models.embedded_data_specification import EmbeddedDataSpecification
 from app.models.extension import Extension
 from app.models.key import Key
+
 from app.models.property import Property
 from app.models.qualifier import Qualifier
 from app.models.reference import Reference
@@ -113,8 +114,8 @@ def test_submodel_maximal_to_json():
     assert json.loads(dump) == payload_json
 
 
-def test_any_submodel_element_maximal_to_json():
-    for model in [
+def test_any_submodel_element_to_json():
+    elements_in_submodel_env = [
         "SubmodelElementList",
         "SubmodelElementCollection",
         "Property",
@@ -129,34 +130,13 @@ def test_any_submodel_element_maximal_to_json():
         "ReferenceElement",
         "File",
         "RelationshipElement",
-    ]:
-        payload_json = json.loads(get_testdata_json(model, "maximal"))["submodels"][0]
-        payload = Submodel(**payload_json)
-        dump = payload.model_dump_json(exclude_none=True)
-        assert json.loads(dump) == payload_json
-
-
-def test_any_submodel_element_minimal_to_json():
-    for model in [
-        "SubmodelElementList",
-        "SubmodelElementCollection",
-        "Property",
-        "MultiLanguageProperty",
-        "Range",
-        "Operation",
-        "Entity",
-        "Capability",
-        "Blob",
-        "BasicEventElement",
-        "AnnotatedRelationshipElement",
-        "ReferenceElement",
-        "File",
-        "RelationshipElement",
-    ]:
-        payload_json = json.loads(get_testdata_json(model, "minimal"))["submodels"][0]
-        payload = Submodel(**payload_json)
-        dump = payload.model_dump_json(exclude_none=True)
-        assert json.loads(dump) == payload_json
+    ]
+    for test_type in ["minimal", "maximal"]:
+        for model in elements_in_submodel_env:
+            payload_json = json.loads(get_testdata_json(model, test_type))["submodels"][0]
+            payload = Submodel(**payload_json)
+            dump = payload.model_dump_json(exclude_none=True)
+            assert json.loads(dump) == payload_json
 
 
 def test_submodel_minimal_to_rdf():
@@ -179,6 +159,7 @@ def test_submodel_maximal_to_rdf():
 
 def test_asset_information_maximal_to_rdf():
     payload_json = json.loads(get_testdata_json("AssetInformation", "maximal"))["assetAdministrationShells"][0]
+    payload_json
     payload = AssetAdministrationShell(**payload_json)
     graph, created_node = payload.to_rdf()
     re_created = AssetAdministrationShell.from_rdf(graph, created_node)
@@ -363,52 +344,30 @@ def test_submodel_maximal_to_rdf():
     assert re_created == payload
 
 
-def test_any_submodel_element_minimal_to_rdf():
-    for model in [
+def test_any_submodel_element_to_rdf():
+    elements_in_submodel_env = [
+        "SubmodelElementList",
+        "SubmodelElementCollection",
         "Property",
         "MultiLanguageProperty",
-        "SubmodelElementCollection",
-        "AnnotatedRelationshipElement",
-        "File",
+        "Range",
+        "Operation",
+        "Entity",
         "Capability",
         "Blob",
-        "Range",
-        "ReferenceElement",
-        "RelationshipElement",
-        "Entity",
-        "SubmodelElementList",
         "BasicEventElement",
-        "Operation",
-    ]:
-        payload_json = json.loads(get_testdata_json(model, "minimal"))["submodels"][0]
-        payload = Submodel(**payload_json)
-        graph, created_node = payload.to_rdf()
-        re_created = Submodel.from_rdf(graph, created_node)
-        assert re_created == payload
-
-
-def test_any_submodel_element_maximal_to_rdf():
-    for model in [
-        "Property",
-        "MultiLanguageProperty",
-        "SubmodelElementCollection",
         "AnnotatedRelationshipElement",
-        "File",
-        "Capability",
-        "Blob",
-        "Range",
         "ReferenceElement",
+        "File",
         "RelationshipElement",
-        "Entity",
-        "SubmodelElementList",
-        "BasicEventElement",
-        "Operation",
-    ]:
-        payload_json = json.loads(get_testdata_json(model, "maximal"))["submodels"][0]
-        payload = Submodel(**payload_json)
-        graph, created_node = payload.to_rdf()
-        re_created = Submodel.from_rdf(graph, created_node)
-        assert re_created == payload
+    ]
+    for test_type in ["minimal", "maximal"]:
+        for model in elements_in_submodel_env:
+            payload_json = json.loads(get_testdata_json(model, test_type))["submodels"][0]
+            payload = Submodel(**payload_json)
+            graph, created_node = payload.to_rdf()
+            re_created = Submodel.from_rdf(graph, created_node)
+            assert re_created == payload
 
 
 def test_aas_minimal_to_rdf():
@@ -427,10 +386,23 @@ def test_aas_maximal_to_rdf():
     assert re_created == payload
 
 
+def test_administrative_information_maximal_to_rdf():
+    payload_json = json.loads(get_testdata_json("AdministrativeInformation", "maximal"))["assetAdministrationShells"][0]
+    payload = AssetAdministrationShell(**payload_json)
+    graph, created_node = payload.to_rdf()
+    re_created = AssetAdministrationShell.from_rdf(graph, created_node)
+    assert re_created == payload
+
+
 def test_asset_information_maximal_to_rdf():
     payload_json = json.loads(get_testdata_json("AssetInformation", "maximal"))["assetAdministrationShells"][0][
         "assetInformation"
     ]
+    specific_asset_id_payload_json = json.loads(get_testdata_json("SpecificAssetId", "maximal"))[
+        "assetAdministrationShells"
+    ][0]["assetInformation"]["specificAssetIds"]
+    payload_json["specificAssetIds"] = specific_asset_id_payload_json
+    payload_json["defaultThumbnail"]["contentType"] = "image/png"
     payload = AssetInformation(**payload_json)
     graph, created_node = payload.to_rdf()
     re_created = AssetInformation.from_rdf(graph, created_node)
@@ -456,12 +428,6 @@ def test_specific_asset_id_maximal_to_rdf():
     re_created = SpecificAssetId.from_rdf(graph, created_node)
     assert re_created == payload
 
-def test_aas_with_level_type_maximal_to_rdf():
-    payload_json = json.loads(get_testdata_json("LevelType", "maximal"))["assetAdministrationShells"][0]
-    payload = AssetAdministrationShell(**payload_json)
-    graph, created_node = payload.to_rdf()
-    re_created = AssetAdministrationShell.from_rdf(graph, created_node)
-    assert re_created == payload
 
 def test_specific_asset_id_minimal_to_rdf():
     payload_json = json.loads(get_testdata_json("SpecificAssetId", "minimal"))["assetAdministrationShells"][0][
@@ -470,6 +436,19 @@ def test_specific_asset_id_minimal_to_rdf():
     payload = SpecificAssetId(**payload_json)
     graph, created_node = payload.to_rdf()
     re_created = SpecificAssetId.from_rdf(graph, created_node)
+    assert re_created == payload
+
+
+def test_entity_with_maximal_specific_asset_id_to_rdf():
+    # TODO: fix aas-specs data / validation that specific asset id should be for self-managed
+    specific_asset_id_payload_json = json.loads(get_testdata_json("SpecificAssetId", "minimal"))[
+        "assetAdministrationShells"
+    ][0]["assetInformation"]["specificAssetIds"]
+    payload_json = json.loads(get_testdata_json("Entity", "maximal"))["submodels"][0]
+    payload_json["submodelElements"][0]["specificAssetIds"] = specific_asset_id_payload_json
+    payload = Submodel(**payload_json)
+    graph, created_node = payload.to_rdf()
+    re_created = Submodel.from_rdf(graph, created_node)
     assert re_created == payload
 
 

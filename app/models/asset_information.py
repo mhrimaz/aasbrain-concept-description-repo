@@ -166,7 +166,7 @@ class AssetInformation(BaseModel, RDFiable):
 
         specific_asset_ids_value = []
         for specific_asset_uref in graph.objects(
-            subject=default_thumbnail_uriref, predicate=AASNameSpace.AAS["Resource/specificAssetIds"]
+            subject=subject, predicate=AASNameSpace.AAS["AssetInformation/specificAssetIds"]
         ):
             specific_asset_id = SpecificAssetId.from_rdf(graph, specific_asset_uref)
             specific_asset_ids_value.append(specific_asset_id)
