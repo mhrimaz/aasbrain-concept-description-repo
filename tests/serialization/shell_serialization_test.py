@@ -159,7 +159,6 @@ def test_submodel_maximal_to_rdf():
 
 def test_asset_information_maximal_to_rdf():
     payload_json = json.loads(get_testdata_json("AssetInformation", "maximal"))["assetAdministrationShells"][0]
-    payload_json
     payload = AssetAdministrationShell(**payload_json)
     graph, created_node = payload.to_rdf()
     re_created = AssetAdministrationShell.from_rdf(graph, created_node)
