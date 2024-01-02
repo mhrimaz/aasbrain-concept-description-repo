@@ -456,6 +456,12 @@ def test_specific_asset_id_maximal_to_rdf():
     re_created = SpecificAssetId.from_rdf(graph, created_node)
     assert re_created == payload
 
+def test_aas_with_level_type_maximal_to_rdf():
+    payload_json = json.loads(get_testdata_json("LevelType", "maximal"))["assetAdministrationShells"][0]
+    payload = AssetAdministrationShell(**payload_json)
+    graph, created_node = payload.to_rdf()
+    re_created = AssetAdministrationShell.from_rdf(graph, created_node)
+    assert re_created == payload
 
 def test_specific_asset_id_minimal_to_rdf():
     payload_json = json.loads(get_testdata_json("SpecificAssetId", "minimal"))["assetAdministrationShells"][0][
