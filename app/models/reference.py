@@ -26,7 +26,7 @@ import rdflib
 from pydantic import BaseModel, Field, constr
 
 from app.models.aas_namespace import AASNameSpace
-from app.models.key import Key
+from app.models.key import Key, SubmodelKey
 from app.models.rdfiable import RDFiable
 from app.models.reference_types import ReferenceTypes
 
@@ -70,10 +70,13 @@ class Reference(BaseModel, RDFiable):
             None,
         )
         payload["type"] = key_type[key_type.rfind("/") + 1 :]
-        keys = []
-        for key in graph.objects(subject=subject, predicate=AASNameSpace.AAS["Reference/keys"]):
+
+        keys_content = graph.objects(subject=subject, predicate=AASNameSpace.AAS["Reference/keys"])
+        keys = {}
+        for key in keys_content:
             created_key: Key = Key.from_rdf(graph, key)
-            keys.append(created_key)
+            key_index_ref: rdflib.Literal = next(graph.objects(subject=key, predicate=AASNameSpace.AAS["index"]), None)
+            keys[key_index_ref.value] = created_key
             # TODO: make sure about the order
         referred_semantic_id: rdflib.IdentifiedNode = next(
             graph.objects(subject=subject, predicate=AASNameSpace.AAS["Reference/referredSemanticId"]),
@@ -82,7 +85,15 @@ class Reference(BaseModel, RDFiable):
         referred_semantic_id_created = None
         if referred_semantic_id:
             referred_semantic_id_created = Reference.from_rdf(graph, referred_semantic_id)
-        payload["keys"] = keys
+        payload["keys"] = [keys[i] for i in range(len(keys.items()))]
         return Reference.model_construct(
-            type=ReferenceTypes(payload["type"]), keys=keys, referredSemanticId=referred_semantic_id_created
+            type=ReferenceTypes(payload["type"]), keys=payload["keys"], referredSemanticId=referred_semantic_id_created
         )
+
+
+class SubmodelReference(Reference):
+    type: ReferenceTypes = ReferenceTypes.ModelReference
+    # At least one key should be there
+    keys: List[SubmodelKey] = Field(..., min_length=1, max_length=1)
+    # this is not a mistake, since it is a recursive structure, we need to define it in this way.
+    referredSemanticId: "Reference" = None

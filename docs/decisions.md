@@ -32,3 +32,6 @@ it can be /concept-descriptions/bulkOperations like https://docs.oracle.com/en/c
 or it can be /bulk/concept-descriptions like https://mailchimp.com/developer/marketing/guides/run-async-requests-batch-endpoint/
 
 HoRi 2023.12.04 - Why modelType: Literal['Property'] = ModelType.Property.value? because only Literal can be discriminator not Enum.
+
+HoRi 2023.12.13 - MongoDB is not a good choice for Submodel, at least the nested normal version of submodle. For CD and Shell it is fine because they are not nested. the schema of mongodb for submodel should be different.
+

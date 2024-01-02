@@ -50,7 +50,23 @@ services:
       - cd-repo-network
     ports:
       - "6019:6379"
+  graphdb:
+    container_name: graphdb
+    image: ontotext/graphdb:10.4.2
+    restart: unless-stopped
+    environment:
+      GDB_JAVA_OPTS: >-
+        -Xmx2g -Xms1g
+    networks:
+      - cd-repo-network
+    volumes:
+      - graphdbvolume:/opt/graphdb/home
+    ports:
+      - "7200:7200"
 
 networks:
   cd-repo-network:
     external: true
+
+volumes:
+  graphdbvolume:

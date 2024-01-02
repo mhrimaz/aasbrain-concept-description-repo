@@ -66,7 +66,10 @@ class AssetInformation(BaseModel, RDFiable):
             graph = Graph()
             graph.bind("aas", AASNameSpace.AAS)
 
-        node = rdflib.BNode()
+        if self.globalAssetId:
+            node = rdflib.URIRef(f"asset-information/{self.globalAssetId}")
+        else:
+            node = rdflib.BNode()
         graph.add((node, RDF.type, rdflib.URIRef(AASNameSpace.AAS["AssetInformation"])))
 
         graph.add(

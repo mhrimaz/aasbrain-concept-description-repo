@@ -4,6 +4,7 @@ from typing import List, Any
 import rdflib
 from pydantic import BaseModel
 from rdflib import Graph, RDF
+from rdflib.tools.rdf2dot import rdf2dot
 
 from app.models.aas_namespace import AASNameSpace
 from app.models.asset_administraion_shell import AssetAdministrationShell
@@ -18,6 +19,7 @@ from app.models.key import Key
 from app.models.property import Property
 from app.models.qualifier import Qualifier
 from app.models.reference import Reference
+from app.models.reference_element import ReferenceElement
 from app.models.serializer import TurtleSerializerCustom
 from app.models.specific_asset_id import SpecificAssetId
 from app.models.submodel import Submodel
@@ -356,9 +358,7 @@ def test_submodel_maximal_to_rdf():
     """
     payload_json = json.loads(payload)
     payload = Submodel(**payload_json)
-    print(payload)
     graph, created_node = payload.to_rdf()
-    print(graph.serialize(format="turtle_custom"))
     re_created = Submodel.from_rdf(graph, created_node)
     assert re_created == payload
 
@@ -464,4 +464,62 @@ def test_specific_asset_id_minimal_to_rdf():
     payload = SpecificAssetId(**payload_json)
     graph, created_node = payload.to_rdf()
     re_created = SpecificAssetId.from_rdf(graph, created_node)
+    assert re_created == payload
+
+
+def test_reference_element_multi_key_to_rdf():
+    payload_json = json.loads(
+        """
+    {
+                    "idShort":"someElement",
+                    "modelType":"ReferenceElement",
+                    "value":{
+                        "keys":[
+                            {
+                                "type":"Submodel",
+                                "value":"https://example.com/something"
+                            },
+                            {
+                                "type":"SubmodelElementList",
+                                "value":"something_more"
+                            },
+                            {
+                                "type":"Property",
+                                "value":"123"
+                            }
+                        ],
+                        "type":"ModelReference"
+                    }
+                }
+                """
+    )
+
+    payload_rdf = """
+@prefix aas: <https://admin-shell.io/aas/3/0/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<changed> a aas:ReferenceElement ;
+    
+    <https://admin-shell.io/aas/3/0/ReferenceElement/value> [ a aas:Reference ;
+            <https://admin-shell.io/aas/3/0/Reference/keys> [ a aas:Key ;
+                    <https://admin-shell.io/aas/3/0/Key/type> <https://admin-shell.io/aas/3/0/KeyTypes/SubmodelElementList> ;
+                    <https://admin-shell.io/aas/3/0/Key/value> "something_more" ;
+                    aas:index 1 ],
+                [ a aas:Key ;
+                    <https://admin-shell.io/aas/3/0/Key/type> <https://admin-shell.io/aas/3/0/KeyTypes/Property> ;
+                    <https://admin-shell.io/aas/3/0/Key/value> "123" ;
+                    aas:index 2 ],
+                [ a aas:Key ;
+                    <https://admin-shell.io/aas/3/0/Key/type> <https://admin-shell.io/aas/3/0/KeyTypes/Submodel> ;
+                    <https://admin-shell.io/aas/3/0/Key/value> "https://example.com/something" ;
+                    aas:index 0 ] ;
+            <https://admin-shell.io/aas/3/0/Reference/type> <https://admin-shell.io/aas/3/0/ReferenceTypes/ModelReference> ] ;
+
+    <https://admin-shell.io/aas/3/0/Referable/idShort> "someElement" .
+    """
+    payload = ReferenceElement(**payload_json)
+
+    g = rdflib.Graph().parse(data=payload_rdf)
+    subject = next(g.subjects(predicate=RDF.type, object=AASNameSpace.AAS["ReferenceElement"]))
+    re_created = ReferenceElement.from_rdf(g, subject)
     assert re_created == payload

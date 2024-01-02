@@ -47,7 +47,7 @@ class Key(BaseModel, RDFiable):
             graph = rdflib.Graph()
             graph.bind("aas", AASNameSpace.AAS)
         node = rdflib.BNode()
-        rdflib.namespace
+
         graph.add((node, rdflib.RDF.type, AASNameSpace.AAS["Key"]))
         graph.add(
             (
@@ -79,3 +79,8 @@ class Key(BaseModel, RDFiable):
         payload["type"] = key_type[key_type.rfind("/") + 1 :]
         payload["value"] = value.value
         return Key(**payload)
+
+
+class SubmodelKey(Key):
+    type: KeyTypes = KeyTypes.Submodel
+    value: constr(min_length=1, max_length=2000)
