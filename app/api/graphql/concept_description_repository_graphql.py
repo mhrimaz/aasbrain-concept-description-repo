@@ -2,6 +2,7 @@ import json
 
 from ariadne import QueryType, make_executable_schema
 from ariadne.asgi import GraphQL
+from ariadne.explorer import ExplorerGraphiQL
 from fastapi import FastAPI
 from ariadne import ObjectType, make_executable_schema
 from app.models.concept_description import ConceptDescription
@@ -297,3 +298,41 @@ async def resolve_concept_description(_, info, id):
 
 # Create executable schema instance
 schema = make_executable_schema(type_defs, query)
+
+default_graphql_query = """# AAS Brain Concept Description GraphQL Endpoint
+# GraphiQL is an in -browser tool for writing, validating, and
+# testing GraphQL queries.
+#
+# Type queries into this side of the screen, and you will see intelligent
+# typeaheads aware of the current GraphQL type schema and live syntax and
+# validation errors highlighted within the text.
+#
+# GraphQL queries typically start with a "{" character. Lines that start
+# with a # are ignored.
+#
+# An example GraphQL query might look like:
+#
+{
+  conceptDescription(id:"MyConcept"){
+    id
+#    embeddedDataSpecifications{
+#      dataSpecificationContent{
+#        unit
+#        preferredName{
+#          text
+#       }
+#      }
+#    }
+  }
+}
+#
+# Keyboard shortcuts:
+#   Prettify query: Shift - Ctrl - P(or press the prettify button)
+#   Run Query: Ctrl - Enter(or press the play button)
+#   Auto Complete: Ctrl - Space(or just start typing)
+#   Merge fragments: Shift - Ctrl - M(or press the merge button)"""
+router = GraphQL(
+    schema,
+    debug=True,
+    explorer=ExplorerGraphiQL(title="AAS Brain GraphQL", default_query=default_graphql_query),
+)

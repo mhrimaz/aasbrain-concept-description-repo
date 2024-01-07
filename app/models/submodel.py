@@ -106,12 +106,12 @@ class Submodel(Identifiable, HasKind, HasSemantics, Qualifiable, HasDataSpecific
 
                 common_pref = ""
                 if id_strategy == "base64-url-encode":
-                    prefix_uri = f"{base_64_url_encode(self.id)}/submodel-elements/"
+                    common_pref = f"{base_64_url_encode(self.id)}/submodel-elements/"
                 else:
-                    prefix_uri = f"{url_encode(self.id+'/submodel-elements/')}"
+                    common_pref = f"{url_encode(self.id+'/submodel-elements/')}"
 
                 _, created_node = submodel_element.to_rdf(
-                    graph, node, prefix_uri=prefix_uri, base_uri=base_uri, id_strategy=id_strategy
+                    graph, node, prefix_uri=common_pref, base_uri=base_uri, id_strategy=id_strategy
                 )
                 graph.add((created_node, AASNameSpace.AAS["index"], rdflib.Literal(idx)))
                 graph.add((node, AASNameSpace.AAS["Submodel/submodelElements"], created_node))

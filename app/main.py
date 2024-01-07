@@ -20,22 +20,12 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import json
-import logging
 import os
 from contextlib import asynccontextmanager
-from datetime import datetime
-from pathlib import Path
-from typing import List, Optional
-
-import fastapi
-from ariadne.explorer import ExplorerGraphiQL
-from fastapi.openapi.docs import get_redoc_html, get_swagger_ui_html
+from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import JSONResponse
 import uvicorn
 from datetime import datetime, timezone
-from fastapi import FastAPI
-from ariadne import QueryType, make_executable_schema
-from ariadne.asgi import GraphQL
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -44,8 +34,11 @@ from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
 
 from app.api.graphql import concept_description_repository_graphql
-from app.api.rest import concept_description_repository_rest
-from app.api.rest import concept_description_repository_extra_rest
+from app.api.rest.conceptdescription import (
+    concept_description_repository_rest,
+    concept_description_repository_extra_rest,
+)
+from app.api.rest import rdf_utility_rest
 from app.config import get_config
 from app.models.concept_description import ConceptDescription
 from app.models.response import HealthResponse, Result, MessageType, APIException
@@ -103,52 +96,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# REST API Endpoints
+# Include Official Concept Description REST API Endpoints
 app.include_router(concept_description_repository_rest.router)
+
+# Include RDF Utility
+app.include_router(rdf_utility_rest.router)
 
 # Include Extra Features
 app.include_router(concept_description_repository_extra_rest.router)
 
-# GraphQL Endpoints
-default_graphql_query = """# AAS Brain Concept Description GraphQL Endpoint
-# GraphiQL is an in -browser tool for writing, validating, and
-# testing GraphQL queries.
-#
-# Type queries into this side of the screen, and you will see intelligent
-# typeaheads aware of the current GraphQL type schema and live syntax and
-# validation errors highlighted within the text.
-#
-# GraphQL queries typically start with a "{" character. Lines that start
-# with a # are ignored.
-#
-# An example GraphQL query might look like:
-#
-{
-  conceptDescription(id:"MyConcept"){
-    id
-#    embeddedDataSpecifications{
-#      dataSpecificationContent{
-#        unit
-#        preferredName{
-#          text
-#       }
-#      }
-#    }
-  }
-}
-#
-# Keyboard shortcuts:
-#   Prettify query: Shift - Ctrl - P(or press the prettify button)
-#   Run Query: Ctrl - Enter(or press the play button)
-#   Auto Complete: Ctrl - Space(or just start typing)
-#   Merge fragments: Shift - Ctrl - M(or press the merge button)"""
+# Include Concept Description GraphQL Endpoints
 app.mount(
     "/graphql/",
-    GraphQL(
-        concept_description_repository_graphql.schema,
-        debug=True,
-        explorer=ExplorerGraphiQL(title="AAS Brain GraphQL", default_query=default_graphql_query),
-    ),
+    concept_description_repository_graphql.router,
     name="GraphQL",
 )
 

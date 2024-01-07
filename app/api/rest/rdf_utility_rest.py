@@ -1,6 +1,6 @@
 #  MIT License
 #
-#  Copyright (c) 2023. Mohammad Hossein Rimaz
+#  Copyright (c) 2024. Mohammad Hossein Rimaz
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of
 #  this software and associated documentation files (the “Software”), to deal in
@@ -44,61 +44,6 @@ from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
 
 router = APIRouter()
-
-
-@router.get("/concept-descriptions/{cdIdentifier}/history", tags=["Extra"])
-async def get_concept_description_history_metadata(
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    raise NotImplementedError("History endpoint not implemented.")
-
-
-@router.get("/concept-descriptions/{cdIdentifier}/history/{version}", tags=["Extra"])
-async def get_concept_description_history(
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    raise NotImplementedError("History endpoint not implemented.")
-
-
-@router.get("/concept-descriptions/metadata", tags=["Extra"])
-async def concept_descriptions_metadata():
-    raise NotImplementedError("Metadata endpoint not implemented.")
-
-
-# Follows google api guideline
-# https://cloud.google.com/apis/design/custom_methods
-
-
-@router.post("/concept-descriptions:search", tags=["Extra"])
-async def search_concept_descriptions(
-    concepts: List[ConceptDescription],
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    raise NotImplementedError("Search endpoint not implemented.")
-
-
-@router.post("/concept-descriptions:bulkCreate", tags=["Extra"])
-async def atomic_bulk_create_concept_descriptions(
-    concepts: List[ConceptDescription],
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    raise NotImplementedError("Bulk create endpoint not implemented.")
-
-
-@router.post("/concept-descriptions:bulkDelete", tags=["Extra"])
-async def atomic_bulk_delete_concept_descriptions(
-    concepts_id: List[str],
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    raise NotImplementedError("Bulk delete endpoint not implemented.")
-
-
-@router.post("/concept-descriptions:bulkUpdate", tags=["Extra"])
-async def atomic_bulk_update_concept_descriptions(
-    concepts: List[ConceptDescription],
-    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
-):
-    raise NotImplementedError("Bulk update endpoint not implemented.")
 
 
 @router.post("/submodel:jsontordf", tags=["RDF"])

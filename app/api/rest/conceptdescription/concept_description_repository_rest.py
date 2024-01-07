@@ -239,7 +239,7 @@ async def update_concept_description(
     concept_description: ConceptDescription = fastapi.Body(..., description="Concept Description object"),
     cd_repository: ConceptDescriptionRepository = Depends(get_repository),
 ):
-    return cd_repository.update_concept_description()
+    return cd_repository.update_concept_description(cdIdentifier, concept_description)
 
 
 @router.delete(
