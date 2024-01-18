@@ -6,12 +6,12 @@ from typing import Union
 import rdflib
 import requests
 
-from app.models.asset_administraion_shell import AssetAdministrationShell
-from app.models.concept_description import ConceptDescription
-from app.models.response import ConceptNotFoundException, DuplicateConceptException
-from app.models.submodel import Submodel
+from aasbrain_models.asset_administraion_shell import AssetAdministrationShell
+from aasbrain_models.concept_description import ConceptDescription
+from aasbrain_models.response import ConceptNotFoundException, DuplicateConceptException
+from aasbrain_models.submodel import Submodel
 import requests
-from app.models import (
+from aasbrain_models import (
     base_64_url_encode,
     base_64_url_decode,
 )

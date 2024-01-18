@@ -6,24 +6,24 @@ from pydantic import BaseModel
 from rdflib import Graph, RDF
 from rdflib.tools.rdf2dot import rdf2dot
 
-from app.models.aas_namespace import AASNameSpace
-from app.models.asset_administraion_shell import AssetAdministrationShell
-from app.models.asset_information import AssetInformation
-from app.models.concept_description import ConceptDescription
+from aasbrain_models.aas_namespace import AASNameSpace
+from aasbrain_models.asset_administraion_shell import AssetAdministrationShell
+from aasbrain_models.asset_information import AssetInformation
+from aasbrain_models.concept_description import ConceptDescription
 import json
 
-from app.models.data_specification_iec_61360 import DataSpecificationIec61360
-from app.models.embedded_data_specification import EmbeddedDataSpecification
-from app.models.extension import Extension
-from app.models.key import Key
+from aasbrain_models.data_specification_iec_61360 import DataSpecificationIec61360
+from aasbrain_models.embedded_data_specification import EmbeddedDataSpecification
+from aasbrain_models.extension import Extension
+from aasbrain_models.key import Key
 
-from app.models.property import Property
-from app.models.qualifier import Qualifier
-from app.models.reference import Reference
-from app.models.reference_element import ReferenceElement
-from app.models.serializer import TurtleSerializerCustom
-from app.models.specific_asset_id import SpecificAssetId
-from app.models.submodel import Submodel
+from aasbrain_models.property import Property
+from aasbrain_models.qualifier import Qualifier
+from aasbrain_models.reference import Reference
+from aasbrain_models.reference_element import ReferenceElement
+from aasbrain_models.serializer import TurtleSerializerCustom
+from aasbrain_models.specific_asset_id import SpecificAssetId
+from aasbrain_models.submodel import Submodel
 from tests.model_test import get_testdata_json, get_testdata_rdf
 
 

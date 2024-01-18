@@ -1,13 +1,13 @@
 import json
 import os
 
-from app.models.asset_information import AssetInformation
-from app.models.concept_description import ConceptDescription
+from aasbrain_models.asset_information import AssetInformation
+from aasbrain_models.concept_description import ConceptDescription
 import json
 
-from app.models.property import Property
-from app.models.submodel import Submodel
-from app.models import base_64_url_encode, base_64_url_decode
+from aasbrain_models.property import Property
+from aasbrain_models.submodel import Submodel
+from aasbrain_models import base_64_url_encode, base_64_url_decode
 
 
 def get_testdata_rdf(element: str, type="minimal"):
