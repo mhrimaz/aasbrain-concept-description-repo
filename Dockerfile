@@ -1,7 +1,7 @@
 FROM python:3.11-alpine
 
-RUN adduser -D myuser
-USER myuser
+RUN adduser -D nonroot
+USER nonroot
 
 WORKDIR /app
 
