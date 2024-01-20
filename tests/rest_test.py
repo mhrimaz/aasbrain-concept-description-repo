@@ -126,8 +126,8 @@ def insert_rdf_into_triplestore(element: Union[ConceptDescription, Submodel, Ass
 
 if __name__ == "__main__":
     basyx = "http://127.0.0.1:8085"
-    size = 3000
-    submodels_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/new data 11.2023/dataset2_json/submodels_{size}.json"
+    size = 30
+    submodels_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/data v2/data/submodels_{size}.json"
     url = f"{basyx}/submodels/"
     print("Adding Submodels")
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             except Exception as ex:
                 print("FAILED" + submodel_object.id)
 
-    concepts_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/new data 11.2023/dataset2_json/concepts_{size}.json"
+    concepts_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/data v2/data/concepts_{size}.json"
     url = f"{basyx}/concept-descriptions/"
     print("Adding Concepts")
     with open(concepts_file, encoding="utf-8") as f:
@@ -163,7 +163,7 @@ if __name__ == "__main__":
             except:
                 print("FAILED" + concept_object.id)
 
-    shells_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/new data 11.2023/dataset2_json/shells_{size}.json"
+    shells_file = f"C:/Users/Rimaz/OneDrive - Technologie-Initiative Smartfactory KL e.V/ReCircE intern/HosseinMasterarbeit/Presentations/Reasoner Demo/data/data v2/data/shells_{size}.json"
     url = f"{basyx}/shells/"
     print("Adding Shells")
     with open(shells_file, encoding="utf-8") as f:

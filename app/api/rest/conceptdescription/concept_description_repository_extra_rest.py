@@ -71,6 +71,13 @@ async def get_concept_description_history(
     raise NotImplementedError("History endpoint not implemented.")
 
 
+@router.get("/concept-descriptions/{cdIdentifier}/{version}/{revision}", tags=["Extra"])
+async def get_concept_description_with_version_and_revision(
+    cd_repository: ConceptDescriptionRepository = Depends(get_repository),
+):
+    raise NotImplementedError("History endpoint not implemented.")
+
+
 @router.get("/concept-descriptions/metadata", tags=["Extra"])
 async def concept_descriptions_metadata():
     raise NotImplementedError("Metadata endpoint not implemented.")
