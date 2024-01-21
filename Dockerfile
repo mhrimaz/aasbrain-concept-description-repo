@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3.11-alpine as builder
 
 RUN adduser -D nonroot
 USER nonroot
@@ -6,7 +6,14 @@ USER nonroot
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+FROM python:3.11-alpine
+
+COPY --from=builder /app /app
+
+USER nonroot
+WORKDIR /app
 
 COPY . .
 
