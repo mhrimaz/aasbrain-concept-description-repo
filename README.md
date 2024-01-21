@@ -30,8 +30,9 @@ docker pull mhrimaz/aas-brain-concept-description-repo
 
 Option 1: Simple deployment:
 ```bash
-docker run --name=cd-redis -p6767:6379 redis:7.0-alpine
-docker run -e DB_URI="redis://cd-redis:6379" --link=cd-redis -p9393:80 mhrimaz/aas-brain-concept-description-repo
+docker network create cd-repo-network
+docker run -d --name=cd-redis --network=cd-repo-network -p6767:6379 redis:7.0-alpine
+docker run -e DB_URI="redis://cd-redis:6379" --network=cd-repo-network -p9393:80 mhrimaz/aas-brain-concept-description-repo
 ```
 
 Option 2: Running on your domain behind traefik with auto ssl certificates:
