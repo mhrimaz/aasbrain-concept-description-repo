@@ -10,9 +10,11 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 FROM python:3.11-alpine
 
-COPY --from=builder /app /app
-
+RUN adduser -D nonroot
 USER nonroot
+
+COPY --from=builder --chown=nonroot:nonroot /app /app
+
 WORKDIR /app
 
 COPY . .
