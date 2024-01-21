@@ -18,6 +18,7 @@ COPY --from=builder --chown=nonroot:nonroot /app /app
 WORKDIR /app
 
 COPY . .
+RUN chmod -R 755 /app
 
 EXPOSE 80
 
