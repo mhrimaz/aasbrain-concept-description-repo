@@ -13,12 +13,12 @@ FROM python:3.11-alpine
 RUN adduser -D nonroot
 USER nonroot
 
-COPY --from=builder --chown=nonroot:nonroot /app /app
+COPY --from=builder --chown=nonroot:nonroot --chmod=755 /app /app
 
 WORKDIR /app
 
 COPY . .
-RUN chmod -R 755 /app
+
 
 EXPOSE 80
 
