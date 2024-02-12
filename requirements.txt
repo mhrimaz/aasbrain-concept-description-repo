@@ -8,5 +8,5 @@ httpx==0.26.0
 ariadne==0.21
 redis[hiredis]==5.0.0
 rdflib==7.0.0
-starlette==0.35.1
+starlette==0.37.1
 requests==2.31.0
