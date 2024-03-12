@@ -19,21 +19,15 @@
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from enum import Enum
-from typing import Any, List, Optional, Union, Literal
+from typing import Optional, Literal
 
 import rdflib
-from pydantic import BaseModel, Field, constr
 from rdflib import RDF
 
 from app.models.aas_namespace import AASNameSpace
 from app.models.data_element import DataElement
-from app.models.data_type_def_xsd import DataTypeDefXsd
-from app.models.lang_string_text_type import LangStringTextType
 from app.models.model_type import ModelType
-from app.models.reference import Reference
 from app.models.submodel_element import SubmodelElement
-import base64
 
 
 # TODO: check content type

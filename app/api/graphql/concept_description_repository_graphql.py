@@ -1,17 +1,13 @@
 import json
 
-from ariadne import QueryType, make_executable_schema
+from ariadne import QueryType
+from ariadne import make_executable_schema
 from ariadne.asgi import GraphQL
 from ariadne.explorer import ExplorerGraphiQL
-from fastapi import FastAPI
-from ariadne import ObjectType, make_executable_schema
-from app.models.concept_description import ConceptDescription
-from app.models.key import Key, KeyTypes
-import os
 
+from app.models import base_64_url_encode
 from app.models.response import APIException
 from app.repository import get_repository
-from app.models import base_64_url_encode
 
 type_defs = """
     enum ReferenceTypes{

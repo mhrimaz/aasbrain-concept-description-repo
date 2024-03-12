@@ -20,28 +20,16 @@
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import json
-from typing import Optional, List
 
-import rdflib
-from fastapi import APIRouter, Header
 import fastapi
-from fastapi.openapi.docs import get_redoc_html
-from rdflib import Graph
+import rdflib
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
 from app.models.aas_namespace import AASNameSpace
 from app.models.asset_administraion_shell import AssetAdministrationShell
 from app.models.concept_description import ConceptDescription
-from app.models.response import (
-    GetConceptDescriptionsResult,
-    Result,
-    ServiceDescription,
-    DatabaseConnectionException,
-    ConceptNotFoundException,
-)
 from app.models.submodel import Submodel
-from app.repository import ConceptDescriptionRepository, get_repository
-from fastapi import Depends, FastAPI
-from fastapi.responses import JSONResponse
 
 router = APIRouter()
 

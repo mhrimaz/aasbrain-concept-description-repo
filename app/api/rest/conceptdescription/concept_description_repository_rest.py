@@ -33,24 +33,18 @@
 import json
 from typing import Optional
 
-import rdflib
-from fastapi import APIRouter, Header
 import fastapi
-from fastapi.openapi.docs import get_redoc_html
-from rdflib import Graph
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi.responses import JSONResponse
 
 from app.models.concept_description import ConceptDescription
 from app.models.response import (
     GetConceptDescriptionsResult,
     Result,
     ServiceDescription,
-    DatabaseConnectionException,
-    ConceptNotFoundException,
-    Message,
 )
 from app.repository import ConceptDescriptionRepository, get_repository
-from fastapi import Depends, FastAPI
-from fastapi.responses import JSONResponse
 
 # TODO: Toooo long, refactor and break
 

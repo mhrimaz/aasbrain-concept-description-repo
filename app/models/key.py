@@ -19,12 +19,8 @@
 #  CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 #  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from enum import Enum
-from typing import Any, List, Optional, Union, Literal
-
-import pydantic
 import rdflib
-from pydantic import BaseModel, Field, constr
+from pydantic import BaseModel, constr
 
 from app.models.aas_namespace import AASNameSpace
 from app.models.key_types import KeyTypes
